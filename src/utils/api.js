@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000/api';
+const BASE_URL = import.meta.env.VITE_API_URL || 'https://shoestopper-backend.onrender.com/api';
 
 // Create axios instance
 const api = axios.create({
@@ -40,6 +40,7 @@ export const authAPI = {
   logout: () => api.post('/auth/logout'),
   profile: () => api.get('/auth/profile'),
   refreshToken: () => api.post('/auth/refresh'),
+  verifyOtp: (email, otp, otpType = 'VERIFICATION') => api.post('/auth/verify-otp', { email, otp, otpType }),
 };
 
 // Products API

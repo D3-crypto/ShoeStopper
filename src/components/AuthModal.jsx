@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { X, Eye, EyeOff, Lock, Mail, User, Phone, Shield } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import { authAPI } from '../utils/api';
 import { toast } from 'react-toastify';
 
 const AuthModal = ({ isOpen, onClose }) => {
@@ -38,31 +39,17 @@ const AuthModal = ({ isOpen, onClose }) => {
   const verifyOtp = async () => {
     setLoading(true);
     try {
-      const response = await fetch('http://localhost:4000/api/auth/verify-otp', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email: registeredEmail,
-          otp: otpData.otp,
-          otpType: 'VERIFICATION'
-        })
-      });
+      const response = await authAPI.verifyOtp(registeredEmail, otpData.otp, 'VERIFICATION');
 
-      const result = await response.json();
-      
-      if (response.ok) {
+      if (response.data) {
         toast.success('Email verified successfully! You can now sign in.');
         setShowOtpVerification(false);
         setIsLogin(true);
         setFormData({ name: '', email: '', password: '', phone: '' });
         setOtpData({ otp: '', email: '' });
-      } else {
-        toast.error(result.error || 'OTP verification failed');
       }
-    } catch (err) {
-      toast.error('Network error. Please try again.');
+    } catch (error) {
+      toast.error(error.response?.data?.error || 'OTP verification failed');
     } finally {
       setLoading(false);
     }
@@ -115,16 +102,16 @@ const AuthModal = ({ isOpen, onClose }) => {
       <div className="bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto border border-white/20 animate-in slide-in-from-bottom-4 duration-500">
         {/* Background Pattern */}
         <div className="absolute inset-0 bg-gradient-to-br from-blue-50/50 to-purple-50/50 rounded-3xl -z-10"></div>
-        
+
         {/* Header */}
         <div className="relative p-8 pb-6">
-          <button 
+          <button
             onClick={onClose}
             className="absolute top-6 right-6 text-gray-400 hover:text-gray-600 p-2 hover:bg-gray-100/50 rounded-full transition-all duration-200"
           >
             <X size={20} />
           </button>
-          
+
           <div className="text-center mb-6">
             <div className="w-16 h-16 bg-gradient-to-br from-blue-600 to-purple-600 rounded-2xl mx-auto mb-4 flex items-center justify-center shadow-lg">
               {showOtpVerification ? (
@@ -139,10 +126,10 @@ const AuthModal = ({ isOpen, onClose }) => {
               {showOtpVerification ? 'Verify Your Email' : (isLogin ? 'Welcome Back' : 'Join ShoeStopper')}
             </h2>
             <p className="text-gray-600 mt-2">
-              {showOtpVerification 
+              {showOtpVerification
                 ? `Enter the verification code sent to ${registeredEmail}`
-                : (isLogin 
-                  ? 'Sign in to your account to continue shopping' 
+                : (isLogin
+                  ? 'Sign in to your account to continue shopping'
                   : 'Create your account and start your style journey'
                 )
               }
