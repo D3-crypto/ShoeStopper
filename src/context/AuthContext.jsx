@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import api, { authAPI } from '../utils/api';
+import axios from 'axios';
+import { authAPI } from '../utils/api';
 
 const AuthContext = createContext();
 
@@ -16,12 +17,21 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [token, setToken] = useState(localStorage.getItem('token'));
 
+  // Set up axios defaults
+  useEffect(() => {
+    if (token) {
+      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    } else {
+      delete axios.defaults.headers.common['Authorization'];
+    }
+  }, [token]);
+
   // Check if user is logged in on app start
   useEffect(() => {
     const checkAuth = async () => {
       if (token) {
         try {
-          const response = await authAPI.profile();
+          const response = await authAPI.getProfile();
           setUser(response.data.user);
         } catch (error) {
           console.error('Auth check failed:', error);
@@ -37,9 +47,9 @@ export const AuthProvider = ({ children }) => {
   const login = async (email, password) => {
     try {
       const response = await authAPI.login(email, password);
-
+      
       const { user: userData, tokens, token: directToken, access: directAccess } = response.data;
-
+      
       // Handle different response formats
       let finalToken;
       if (tokens && tokens.access) {
@@ -49,48 +59,43 @@ export const AuthProvider = ({ children }) => {
       } else if (directAccess) {
         finalToken = directAccess; // Format: { access: "...", refresh: "..." }
       }
-
+      
       if (!finalToken) {
         throw new Error('No access token received');
       }
-
+      
       setToken(finalToken);
       localStorage.setItem('token', finalToken);
-
+      
       if (userData) {
         setUser(userData);
       } else {
         // Fallback: set basic user info
-        setUser({
-          email: email,
+        setUser({ 
+          email: email, 
           name: 'User',
-          authenticated: true
+          authenticated: true 
         });
       }
-
+      
       return { success: true };
     } catch (error) {
-      return {
-        success: false,
-        error: error.response?.data?.error || 'Login failed'
+      return { 
+        success: false, 
+        error: error.response?.data?.error || 'Login failed' 
       };
     }
   };
 
   const register = async (name, email, password, phone) => {
     try {
-      const response = await authAPI.register({
-        name,
-        email,
-        password,
-        phone
-      });
-
+      const response = await authAPI.register(name, email, password, phone);
+      
       return { success: true, message: response.data.message };
     } catch (error) {
-      return {
-        success: false,
-        error: error.response?.data?.error || 'Registration failed'
+      return { 
+        success: false, 
+        error: error.response?.data?.error || 'Registration failed' 
       };
     }
   };
@@ -99,6 +104,7 @@ export const AuthProvider = ({ children }) => {
     setToken(null);
     setUser(null);
     localStorage.removeItem('token');
+    delete axios.defaults.headers.common['Authorization'];
   };
 
   const value = {

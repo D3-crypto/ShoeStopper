@@ -20,10 +20,13 @@ import Contact from './pages/Contact';
 import './App.css';
 
 function App() {
+  // Use basename from environment variable (empty for local dev, /ShoeStopper for GitHub Pages)
+  const basename = import.meta.env.VITE_ROUTER_BASENAME || '';
+  
   return (
     <AuthProvider>
       <CartProvider>
-        <Router basename="/ShoeStopper">
+        <Router basename={basename}>
           <div className="App">
             <Header />
             <main className="min-h-screen">
