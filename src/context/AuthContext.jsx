@@ -29,9 +29,11 @@ export const AuthProvider = ({ children }) => {
   // Check if user is logged in on app start
   useEffect(() => {
     const checkAuth = async () => {
+      console.log('Auth check running, token:', !!token);
       if (token) {
         try {
           const response = await authAPI.getProfile();
+          console.log('Profile response:', response.data);
           setUser(response.data.user);
         } catch (error) {
           console.error('Auth check failed:', error);
@@ -46,7 +48,9 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (email, password) => {
     try {
+      console.log('Login attempt starting...');
       const response = await authAPI.login(email, password);
+      console.log('Login response:', response.data);
       
       const { user: userData, tokens, token: directToken, access: directAccess } = response.data;
       
@@ -61,13 +65,17 @@ export const AuthProvider = ({ children }) => {
       }
       
       if (!finalToken) {
+        console.error('No access token received from login response');
         throw new Error('No access token received');
       }
       
+      console.log('Setting token:', finalToken);
       setToken(finalToken);
       localStorage.setItem('token', finalToken);
+      console.log('Token saved to localStorage');
       
       if (userData) {
+        console.log('Setting user data:', userData);
         setUser(userData);
       } else {
         // Fallback: set basic user info
