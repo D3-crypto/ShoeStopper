@@ -17,6 +17,8 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [token, setToken] = useState(localStorage.getItem('token'));
 
+  console.log('AuthProvider initialized, token from localStorage:', !!token);
+
   // Set up axios defaults
   useEffect(() => {
     if (token) {

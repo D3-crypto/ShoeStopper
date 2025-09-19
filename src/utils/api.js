@@ -39,10 +39,11 @@ api.interceptors.response.use(
 // Auth API
 export const authAPI = {
   login: (email, password) => api.post('/auth/login', { email, password }),
-  register: (userData) => api.post('/auth/register', userData),
+  register: (name, email, password, phone) => api.post('/auth/signup', { name, email, password, phone }),
   logout: () => api.post('/auth/logout'),
-  profile: () => api.get('/auth/profile'),
+  getProfile: () => api.get('/auth/profile'),
   refreshToken: () => api.post('/auth/refresh'),
+  verifyOtp: (email, otp, otpType = 'VERIFICATION') => api.post('/auth/verify-otp', { email, otp, otpType }),
 };
 
 // Products API
