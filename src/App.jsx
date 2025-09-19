@@ -23,7 +23,7 @@ function App() {
   return (
     <AuthProvider>
       <CartProvider>
-        <Router>
+        <Router basename="/ShoeStopper">
           <div className="App">
             <Header />
             <main className="min-h-screen">
