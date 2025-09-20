@@ -81,9 +81,7 @@ const Products = () => {
     { value: 'newest', label: 'Newest First', icon: '🆕' },
     { value: 'oldest', label: 'Oldest First', icon: '📅' },
     { value: 'price-low', label: 'Price: Low to High', icon: '⬆️' },
-    { value: 'price-high', label: 'Price: High to Low', icon: '⬇️' },
-    { value: 'name-asc', label: 'Name: A to Z', icon: '🔤' },
-    { value: 'name-desc', label: 'Name: Z to A', icon: '🔠' }
+    { value: 'price-high', label: 'Price: High to Low', icon: '⬇️' }
   ];
 
   return (
@@ -273,7 +271,7 @@ const Products = () => {
                   : 'grid-cols-1'
               }`}>
                 {products.map(product => (
-                  <ProductCard key={product._id} product={product} />
+                  <ProductCard key={product._id} product={product} viewMode={viewMode} />
                 ))}
               </div>
             )}

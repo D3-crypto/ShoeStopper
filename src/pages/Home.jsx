@@ -150,59 +150,6 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Trending Now Section */}
-      <section className="py-20 bg-gradient-to-r from-purple-900/20 via-blue-900/20 to-cyan-900/20">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <div className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-pink-500/20 to-purple-500/20 backdrop-blur-sm rounded-full border border-pink-500/30 mb-6">
-              <Sparkles className="w-5 h-5 mr-3 text-pink-400" />
-              <span className="text-pink-300 font-medium">Trending Now</span>
-            </div>
-            <h2 className="text-4xl lg:text-5xl font-bold text-white mb-4">
-              What's <span className="bg-gradient-to-r from-pink-400 to-purple-400 bg-clip-text text-transparent">Hot</span> Right Now
-            </h2>
-            <p className="text-lg text-gray-300 max-w-2xl mx-auto">
-              Discover the most popular styles that everyone's talking about
-            </p>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="group relative bg-gradient-to-br from-pink-500/10 to-purple-500/10 backdrop-blur-sm border border-pink-500/20 rounded-3xl p-8 hover:border-pink-400/40 transition-all duration-300">
-              <div className="text-center">
-                <div className="w-16 h-16 bg-gradient-to-br from-pink-500 to-purple-500 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                  <span className="text-2xl">🔥</span>
-                </div>
-                <h3 className="text-xl font-bold text-white mb-2">Retro Sneakers</h3>
-                <p className="text-gray-300 mb-4">Making a huge comeback this season</p>
-                <div className="text-pink-400 font-semibold">+120% in searches</div>
-              </div>
-            </div>
-            
-            <div className="group relative bg-gradient-to-br from-blue-500/10 to-cyan-500/10 backdrop-blur-sm border border-blue-500/20 rounded-3xl p-8 hover:border-blue-400/40 transition-all duration-300">
-              <div className="text-center">
-                <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                  <span className="text-2xl">⚡</span>
-                </div>
-                <h3 className="text-xl font-bold text-white mb-2">Athletic Wear</h3>
-                <p className="text-gray-300 mb-4">Performance meets style</p>
-                <div className="text-blue-400 font-semibold">+85% this month</div>
-              </div>
-            </div>
-            
-            <div className="group relative bg-gradient-to-br from-green-500/10 to-emerald-500/10 backdrop-blur-sm border border-green-500/20 rounded-3xl p-8 hover:border-green-400/40 transition-all duration-300">
-              <div className="text-center">
-                <div className="w-16 h-16 bg-gradient-to-br from-green-500 to-emerald-500 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                  <span className="text-2xl">🌟</span>
-                </div>
-                <h3 className="text-xl font-bold text-white mb-2">Sustainable Shoes</h3>
-                <p className="text-gray-300 mb-4">Eco-friendly fashion choices</p>
-                <div className="text-green-400 font-semibold">+95% interest</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* Categories Section */}
       <section className="py-24 bg-gradient-to-b from-gray-900 to-slate-900">
         <div className="container mx-auto px-4">
@@ -329,7 +276,7 @@ const Home = () => {
             </p>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
             {features.map((feature, index) => (
               <div key={index} className="group relative bg-gradient-to-br from-gray-800/80 to-gray-900/80 backdrop-blur-sm border border-gray-700/50 rounded-3xl p-8 text-center shadow-xl hover:shadow-2xl hover:border-gray-600/50 transition-all duration-500 transform hover:scale-105">
                 <div className="absolute inset-0 bg-gradient-to-br from-blue-600/5 to-purple-600/5 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
@@ -340,90 +287,6 @@ const Home = () => {
                 <p className="relative text-gray-400 leading-relaxed">{feature.description}</p>
               </div>
             ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Customer Testimonials */}
-      <section className="py-24 bg-gradient-to-br from-indigo-900/30 via-purple-900/30 to-pink-900/30 relative overflow-hidden">
-        <div className="absolute inset-0">
-          <div className="absolute top-20 left-10 w-72 h-72 bg-indigo-500/10 rounded-full blur-3xl animate-pulse"></div>
-          <div className="absolute bottom-20 right-10 w-96 h-96 bg-pink-500/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
-        </div>
-        
-        <div className="container mx-auto px-4 relative">
-          <div className="text-center mb-16">
-            <h2 className="text-5xl lg:text-6xl font-bold text-white mb-6">
-              What Our <span className="bg-gradient-to-r from-indigo-400 to-pink-400 bg-clip-text text-transparent">Customers</span> Say
-            </h2>
-            <p className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
-              Don't just take our word for it - hear from our amazing community of shoe lovers
-            </p>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="bg-gradient-to-br from-gray-800/60 to-gray-900/60 backdrop-blur-sm border border-gray-700/50 rounded-3xl p-8 hover:border-gray-600/50 transition-all duration-300">
-              <div className="flex items-center mb-6">
-                <img 
-                  src="https://images.unsplash.com/photo-1494790108755-2616b612b57c?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80" 
-                  alt="Customer" 
-                  className="w-12 h-12 rounded-full mr-4 object-cover"
-                />
-                <div>
-                  <h4 className="font-semibold text-white">Sarah Johnson</h4>
-                  <div className="flex text-yellow-400">
-                    {'★'.repeat(5)}
-                  </div>
-                </div>
-              </div>
-              <p className="text-gray-300 leading-relaxed">
-                "Absolutely love my new sneakers! The quality is outstanding and they're incredibly comfortable. Fast shipping too!"
-              </p>
-            </div>
-            
-            <div className="bg-gradient-to-br from-gray-800/60 to-gray-900/60 backdrop-blur-sm border border-gray-700/50 rounded-3xl p-8 hover:border-gray-600/50 transition-all duration-300">
-              <div className="flex items-center mb-6">
-                <img 
-                  src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80" 
-                  alt="Customer" 
-                  className="w-12 h-12 rounded-full mr-4 object-cover"
-                />
-                <div>
-                  <h4 className="font-semibold text-white">Mike Chen</h4>
-                  <div className="flex text-yellow-400">
-                    {'★'.repeat(5)}
-                  </div>
-                </div>
-              </div>
-              <p className="text-gray-300 leading-relaxed">
-                "Best online shoe shopping experience ever! Amazing collection and the customer service is top-notch."
-              </p>
-            </div>
-            
-            <div className="bg-gradient-to-br from-gray-800/60 to-gray-900/60 backdrop-blur-sm border border-gray-700/50 rounded-3xl p-8 hover:border-gray-600/50 transition-all duration-300">
-              <div className="flex items-center mb-6">
-                <img 
-                  src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80" 
-                  alt="Customer" 
-                  className="w-12 h-12 rounded-full mr-4 object-cover"
-                />
-                <div>
-                  <h4 className="font-semibold text-white">Emma Davis</h4>
-                  <div className="flex text-yellow-400">
-                    {'★'.repeat(5)}
-                  </div>
-                </div>
-              </div>
-              <p className="text-gray-300 leading-relaxed">
-                "These shoes have completely transformed my workout routine. Perfect fit and style - couldn't be happier!"
-              </p>
-            </div>
-          </div>
-          
-          <div className="text-center mt-12">
-            <div className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-green-500/20 to-emerald-500/20 backdrop-blur-sm rounded-full border border-green-500/30">
-              <span className="text-green-300 font-medium">Join 50,000+ happy customers!</span>
-            </div>
           </div>
         </div>
       </section>
@@ -474,10 +337,6 @@ const Home = () => {
                   className="w-full h-96 object-cover rounded-2xl"
                 />
               </div>
-              <div className="absolute -top-6 -right-6 bg-gradient-to-br from-orange-500 to-red-500 text-white p-4 rounded-2xl shadow-2xl">
-                <div className="text-xl font-bold">5 Years</div>
-                <div className="text-orange-100 text-sm">Of Excellence</div>
-              </div>
             </div>
           </div>
         </div>
@@ -512,7 +371,7 @@ const Home = () => {
                 </button>
               </div>
               <p className="text-sm text-gray-400 mt-6">
-                Join 50,000+ happy customers. No spam, unsubscribe anytime.
+                No spam, unsubscribe anytime.
               </p>
             </div>
           </div>
