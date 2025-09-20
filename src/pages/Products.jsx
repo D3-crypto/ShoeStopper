@@ -15,7 +15,6 @@ const Products = () => {
   // Filter states
   const [filters, setFilters] = useState({
     categories: [],
-    priceRange: { min: '', max: '' },
     search: searchParams.get('q') || ''
   });
 
@@ -65,20 +64,9 @@ const Products = () => {
     }));
   };
 
-  const handlePriceRangeChange = (field, value) => {
-    setFilters(prev => ({
-      ...prev,
-      priceRange: {
-        ...prev.priceRange,
-        [field]: value
-      }
-    }));
-  };
-
   const clearFilters = () => {
     setFilters({
       categories: [],
-      priceRange: { min: '', max: '' },
       search: ''
     });
     setSearchParams({});
@@ -86,8 +74,6 @@ const Products = () => {
 
   const getActiveFiltersCount = () => {
     return filters.categories.length + 
-           (filters.priceRange.min ? 1 : 0) + 
-           (filters.priceRange.max ? 1 : 0) +
            (filters.search ? 1 : 0);
   };
 
@@ -249,27 +235,6 @@ const Products = () => {
                       </span>
                     </label>
                   ))}
-                </div>
-              </div>
-
-              {/* Price Range Filter */}
-              <div className="mb-6">
-                <h4 className="font-semibold text-gray-900 mb-4 text-lg">Price Range</h4>
-                <div className="space-y-3">
-                  <input
-                    type="number"
-                    placeholder="Min price ($)"
-                    value={filters.priceRange.min}
-                    onChange={(e) => handlePriceRangeChange('min', e.target.value)}
-                    className="w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
-                  />
-                  <input
-                    type="number"
-                    placeholder="Max price ($)"
-                    value={filters.priceRange.max}
-                    onChange={(e) => handlePriceRangeChange('max', e.target.value)}
-                    className="w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
-                  />
                 </div>
               </div>
             </div>

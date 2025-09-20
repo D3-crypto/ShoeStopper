@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { ChevronRight, Truck, Shield, RotateCcw, Star, ArrowRight, Sparkles } from 'lucide-react';
+import { ChevronRight, Truck, Shield, Star, ArrowRight, Sparkles } from 'lucide-react';
 import ProductCard from '../components/ProductCard';
 import { productsAPI } from '../utils/api';
 
@@ -62,12 +62,6 @@ const Home = () => {
       title: "Secure Payment",
       description: "256-bit SSL encryption for safe transactions",
       color: "from-emerald-500 to-teal-500"
-    },
-    {
-      icon: <RotateCcw className="w-12 h-12" />,
-      title: "Easy Returns",
-      description: "Hassle-free 60-day return policy",
-      color: "from-purple-500 to-indigo-500"
     },
     {
       icon: <Star className="w-12 h-12" />,
@@ -150,6 +144,59 @@ const Home = () => {
               <div className="absolute -bottom-6 -right-6 bg-gradient-to-br from-purple-600 to-purple-700 text-white p-6 rounded-2xl shadow-2xl z-30">
                 <div className="text-3xl font-bold">1000+</div>
                 <div className="text-purple-100 text-sm">Premium Styles</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Trending Now Section */}
+      <section className="py-20 bg-gradient-to-r from-purple-900/20 via-blue-900/20 to-cyan-900/20">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-12">
+            <div className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-pink-500/20 to-purple-500/20 backdrop-blur-sm rounded-full border border-pink-500/30 mb-6">
+              <Sparkles className="w-5 h-5 mr-3 text-pink-400" />
+              <span className="text-pink-300 font-medium">Trending Now</span>
+            </div>
+            <h2 className="text-4xl lg:text-5xl font-bold text-white mb-4">
+              What's <span className="bg-gradient-to-r from-pink-400 to-purple-400 bg-clip-text text-transparent">Hot</span> Right Now
+            </h2>
+            <p className="text-lg text-gray-300 max-w-2xl mx-auto">
+              Discover the most popular styles that everyone's talking about
+            </p>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="group relative bg-gradient-to-br from-pink-500/10 to-purple-500/10 backdrop-blur-sm border border-pink-500/20 rounded-3xl p-8 hover:border-pink-400/40 transition-all duration-300">
+              <div className="text-center">
+                <div className="w-16 h-16 bg-gradient-to-br from-pink-500 to-purple-500 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                  <span className="text-2xl">🔥</span>
+                </div>
+                <h3 className="text-xl font-bold text-white mb-2">Retro Sneakers</h3>
+                <p className="text-gray-300 mb-4">Making a huge comeback this season</p>
+                <div className="text-pink-400 font-semibold">+120% in searches</div>
+              </div>
+            </div>
+            
+            <div className="group relative bg-gradient-to-br from-blue-500/10 to-cyan-500/10 backdrop-blur-sm border border-blue-500/20 rounded-3xl p-8 hover:border-blue-400/40 transition-all duration-300">
+              <div className="text-center">
+                <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                  <span className="text-2xl">⚡</span>
+                </div>
+                <h3 className="text-xl font-bold text-white mb-2">Athletic Wear</h3>
+                <p className="text-gray-300 mb-4">Performance meets style</p>
+                <div className="text-blue-400 font-semibold">+85% this month</div>
+              </div>
+            </div>
+            
+            <div className="group relative bg-gradient-to-br from-green-500/10 to-emerald-500/10 backdrop-blur-sm border border-green-500/20 rounded-3xl p-8 hover:border-green-400/40 transition-all duration-300">
+              <div className="text-center">
+                <div className="w-16 h-16 bg-gradient-to-br from-green-500 to-emerald-500 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                  <span className="text-2xl">🌟</span>
+                </div>
+                <h3 className="text-xl font-bold text-white mb-2">Sustainable Shoes</h3>
+                <p className="text-gray-300 mb-4">Eco-friendly fashion choices</p>
+                <div className="text-green-400 font-semibold">+95% interest</div>
               </div>
             </div>
           </div>
@@ -293,6 +340,145 @@ const Home = () => {
                 <p className="relative text-gray-400 leading-relaxed">{feature.description}</p>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Customer Testimonials */}
+      <section className="py-24 bg-gradient-to-br from-indigo-900/30 via-purple-900/30 to-pink-900/30 relative overflow-hidden">
+        <div className="absolute inset-0">
+          <div className="absolute top-20 left-10 w-72 h-72 bg-indigo-500/10 rounded-full blur-3xl animate-pulse"></div>
+          <div className="absolute bottom-20 right-10 w-96 h-96 bg-pink-500/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
+        </div>
+        
+        <div className="container mx-auto px-4 relative">
+          <div className="text-center mb-16">
+            <h2 className="text-5xl lg:text-6xl font-bold text-white mb-6">
+              What Our <span className="bg-gradient-to-r from-indigo-400 to-pink-400 bg-clip-text text-transparent">Customers</span> Say
+            </h2>
+            <p className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
+              Don't just take our word for it - hear from our amazing community of shoe lovers
+            </p>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="bg-gradient-to-br from-gray-800/60 to-gray-900/60 backdrop-blur-sm border border-gray-700/50 rounded-3xl p-8 hover:border-gray-600/50 transition-all duration-300">
+              <div className="flex items-center mb-6">
+                <img 
+                  src="https://images.unsplash.com/photo-1494790108755-2616b612b57c?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80" 
+                  alt="Customer" 
+                  className="w-12 h-12 rounded-full mr-4 object-cover"
+                />
+                <div>
+                  <h4 className="font-semibold text-white">Sarah Johnson</h4>
+                  <div className="flex text-yellow-400">
+                    {'★'.repeat(5)}
+                  </div>
+                </div>
+              </div>
+              <p className="text-gray-300 leading-relaxed">
+                "Absolutely love my new sneakers! The quality is outstanding and they're incredibly comfortable. Fast shipping too!"
+              </p>
+            </div>
+            
+            <div className="bg-gradient-to-br from-gray-800/60 to-gray-900/60 backdrop-blur-sm border border-gray-700/50 rounded-3xl p-8 hover:border-gray-600/50 transition-all duration-300">
+              <div className="flex items-center mb-6">
+                <img 
+                  src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80" 
+                  alt="Customer" 
+                  className="w-12 h-12 rounded-full mr-4 object-cover"
+                />
+                <div>
+                  <h4 className="font-semibold text-white">Mike Chen</h4>
+                  <div className="flex text-yellow-400">
+                    {'★'.repeat(5)}
+                  </div>
+                </div>
+              </div>
+              <p className="text-gray-300 leading-relaxed">
+                "Best online shoe shopping experience ever! Amazing collection and the customer service is top-notch."
+              </p>
+            </div>
+            
+            <div className="bg-gradient-to-br from-gray-800/60 to-gray-900/60 backdrop-blur-sm border border-gray-700/50 rounded-3xl p-8 hover:border-gray-600/50 transition-all duration-300">
+              <div className="flex items-center mb-6">
+                <img 
+                  src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80" 
+                  alt="Customer" 
+                  className="w-12 h-12 rounded-full mr-4 object-cover"
+                />
+                <div>
+                  <h4 className="font-semibold text-white">Emma Davis</h4>
+                  <div className="flex text-yellow-400">
+                    {'★'.repeat(5)}
+                  </div>
+                </div>
+              </div>
+              <p className="text-gray-300 leading-relaxed">
+                "These shoes have completely transformed my workout routine. Perfect fit and style - couldn't be happier!"
+              </p>
+            </div>
+          </div>
+          
+          <div className="text-center mt-12">
+            <div className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-green-500/20 to-emerald-500/20 backdrop-blur-sm rounded-full border border-green-500/30">
+              <span className="text-green-300 font-medium">Join 50,000+ happy customers!</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Brand Story Section */}
+      <section className="py-24 bg-gradient-to-b from-slate-900 via-gray-900 to-black relative">
+        <div className="container mx-auto px-4">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            <div>
+              <h2 className="text-5xl lg:text-6xl font-bold text-white mb-8">
+                Our <span className="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">Story</span>
+              </h2>
+              <div className="space-y-6 text-lg text-gray-300 leading-relaxed">
+                <p>
+                  Founded with a passion for exceptional footwear, ShoeStopper began as a simple idea: 
+                  everyone deserves shoes that make them feel confident and comfortable.
+                </p>
+                <p>
+                  Today, we're proud to serve thousands of customers worldwide, curating the finest 
+                  collection of shoes from emerging designers to established brands.
+                </p>
+                <p>
+                  Our commitment goes beyond just selling shoes - we're building a community of 
+                  style enthusiasts who value quality, comfort, and authentic expression.
+                </p>
+              </div>
+              <div className="flex items-center space-x-8 mt-8">
+                <div className="text-center">
+                  <div className="text-3xl font-bold text-blue-400">50K+</div>
+                  <div className="text-gray-400">Happy Customers</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-3xl font-bold text-purple-400">1000+</div>
+                  <div className="text-gray-400">Styles Available</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-3xl font-bold text-green-400">99%</div>
+                  <div className="text-gray-400">Satisfaction Rate</div>
+                </div>
+              </div>
+            </div>
+            
+            <div className="relative">
+              <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm rounded-3xl p-8 border border-gray-700/50">
+                <img
+                  src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                  alt="Our Store"
+                  className="w-full h-96 object-cover rounded-2xl"
+                />
+              </div>
+              <div className="absolute -top-6 -right-6 bg-gradient-to-br from-orange-500 to-red-500 text-white p-4 rounded-2xl shadow-2xl">
+                <div className="text-xl font-bold">5 Years</div>
+                <div className="text-orange-100 text-sm">Of Excellence</div>
+              </div>
+            </div>
           </div>
         </div>
       </section>

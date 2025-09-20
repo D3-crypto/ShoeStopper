@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Facebook, Twitter, Instagram } from 'lucide-react';
+import { Github, Linkedin, Instagram } from 'lucide-react';
 
 const Footer = () => {
   return (
@@ -23,19 +23,25 @@ const Footer = () => {
             </p>
             <div className="flex space-x-4">
               <a 
-                href="#" 
+                href="https://www.linkedin.com/in/sonu-jha-692708248" 
+                target="_blank"
+                rel="noopener noreferrer"
                 className="p-3 bg-white/10 backdrop-blur-sm rounded-2xl text-gray-300 hover:text-white hover:bg-blue-600 transition-all duration-300 transform hover:scale-110"
               >
-                <Facebook className="w-5 h-5" />
+                <Linkedin className="w-5 h-5" />
               </a>
               <a 
-                href="#" 
-                className="p-3 bg-white/10 backdrop-blur-sm rounded-2xl text-gray-300 hover:text-white hover:bg-blue-400 transition-all duration-300 transform hover:scale-110"
+                href="https://github.com/D3-crypto/" 
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-3 bg-white/10 backdrop-blur-sm rounded-2xl text-gray-300 hover:text-white hover:bg-gray-700 transition-all duration-300 transform hover:scale-110"
               >
-                <Twitter className="w-5 h-5" />
+                <Github className="w-5 h-5" />
               </a>
               <a 
-                href="#" 
+                href="https://instagram.com/Sonu.106" 
+                target="_blank"
+                rel="noopener noreferrer"
                 className="p-3 bg-white/10 backdrop-blur-sm rounded-2xl text-gray-300 hover:text-white hover:bg-gradient-to-r hover:from-pink-500 hover:to-purple-500 transition-all duration-300 transform hover:scale-110"
               >
                 <Instagram className="w-5 h-5" />
@@ -81,23 +87,16 @@ const Footer = () => {
               </li>
               <li>
                 <span className="text-gray-300">
-                  Email: support@shoestopper.com
+                  Email: sonujha5094@gmail.com
                 </span>
               </li>
               <li>
                 <span className="text-gray-300">
-                  Phone: +1 (555) 123-SHOE
+                  Phone: +91 9147737124
                 </span>
               </li>
             </ul>
           </div>
-        </div>
-
-        {/* Bottom Bar */}
-        <div className="border-t border-gray-700 mt-12 pt-8 text-center">
-          <p className="text-gray-400 text-sm">
-            © 2025 ShoeStopper. All rights reserved. Made with ❤️ for shoe lovers.
-          </p>
         </div>
       </div>
     </footer>

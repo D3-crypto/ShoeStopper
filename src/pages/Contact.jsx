@@ -92,10 +92,10 @@ const Contact = () => {
                   <h3 className="font-semibold text-gray-800 mb-1">Email Support</h3>
                   <p className="text-gray-600 mb-2">For general inquiries and support</p>
                   <a 
-                    href="mailto:support@shoestopper.com" 
+                    href="mailto:sonujha5094@gmail.com" 
                     className="text-blue-600 font-medium hover:text-blue-700 transition-colors"
                   >
-                    support@shoestopper.com
+                    sonujha5094@gmail.com
                   </a>
                 </div>
               </div>
@@ -109,10 +109,10 @@ const Contact = () => {
                   <h3 className="font-semibold text-gray-800 mb-1">Phone Support</h3>
                   <p className="text-gray-600 mb-2">Available Mon-Fri, 9 AM - 6 PM</p>
                   <a 
-                    href="tel:+15551234567" 
+                    href="tel:+919147737124" 
                     className="text-green-600 font-medium hover:text-green-700 transition-colors"
                   >
-                    +1 (555) 123-SHOE
+                    +91 9147737124
                   </a>
                 </div>
               </div>
