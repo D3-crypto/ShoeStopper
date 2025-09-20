@@ -6,6 +6,19 @@ Modern React e-commerce application for ShoeStopper shoe store with responsive d
 
 **Website**: [https://d3-crypto.github.io/ShoeStopper](https://d3-crypto.github.io/ShoeStopper)
 
+## ⚠️ Important Notice - Demo Payment System
+
+**This application demonstrates an e-commerce interface with simulated payment processing. It does NOT handle real payments or process actual transactions.**
+
+**Demo Payment Features:**
+- Simulated card payment with demo OTP (`123456`)
+- Mock UPI payment with fake QR code
+- Cash on Delivery (COD) works as expected
+- All payments are for demonstration only
+- No real money is processed
+
+**For Production Use:** Integration with real payment gateways like Stripe, Razorpay, or PayPal would be required.
+
 ## ✨ Key Features
 
 ### Shopping Experience
@@ -24,7 +37,7 @@ Modern React e-commerce application for ShoeStopper shoe store with responsive d
 
 ### Checkout & Orders
 - Multi-step checkout with address selection
-- Multiple payment methods (COD, Card, UPI)
+- **Demo payment methods** (COD, simulated Card/UPI) - *Not real payment processing*
 - Order tracking with real-time status updates
 - Order history with detailed receipts
 - Email confirmations for all order events
@@ -124,4 +137,4 @@ src/
 
 - **Backend API**: ShoeStopper REST API
 - **Email Service**: Newsletter and order confirmations
-- **Payment Processing**: Secure payment gateway integration
+- **Payment Demo**: Simulated payment gateway for demonstration purposes only
