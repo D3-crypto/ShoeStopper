@@ -88,4 +88,10 @@ export const usersAPI = {
   setDefaultAddress: (addressId) => api.put(`/users/addresses/${addressId}/default`),
 };
 
+// Newsletter API
+export const newsletterAPI = {
+  subscribe: (email) => api.post('/newsletter/subscribe', { email }),
+  unsubscribe: (token) => api.get(`/newsletter/unsubscribe/${token}`),
+};
+
 export default api;

@@ -1,12 +1,53 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { ChevronRight, Truck, Shield, Star, ArrowRight, Sparkles } from 'lucide-react';
+import { ChevronRight, Truck, Shield, Star, ArrowRight, Sparkles, CheckCircle, AlertCircle } from 'lucide-react';
 import ProductCard from '../components/ProductCard';
-import { productsAPI } from '../utils/api';
+import { productsAPI, newsletterAPI } from '../utils/api';
 
 const Home = () => {
   const [featuredProducts, setFeaturedProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  
+  // Newsletter subscription state
+  const [email, setEmail] = useState('');
+  const [isSubscribing, setIsSubscribing] = useState(false);
+  const [subscriptionMessage, setSubscriptionMessage] = useState({ text: '', type: '' });
+
+  const validateEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  const handleNewsletterSubscribe = async (e) => {
+    e.preventDefault();
+    
+    if (!email.trim()) {
+      setSubscriptionMessage({ text: 'Please enter your email address.', type: 'error' });
+      return;
+    }
+    
+    if (!validateEmail(email)) {
+      setSubscriptionMessage({ text: 'Please enter a valid email address.', type: 'error' });
+      return;
+    }
+
+    setIsSubscribing(true);
+    setSubscriptionMessage({ text: '', type: '' });
+
+    try {
+      await newsletterAPI.subscribe(email);
+      setSubscriptionMessage({ 
+        text: 'Thank you! Check your email to confirm your subscription.', 
+        type: 'success' 
+      });
+      setEmail('');
+    } catch (error) {
+      const errorMessage = error.response?.data?.message || 'Something went wrong. Please try again.';
+      setSubscriptionMessage({ text: errorMessage, type: 'error' });
+    } finally {
+      setIsSubscribing(false);
+    }
+  };
 
   useEffect(() => {
     const fetchFeaturedProducts = async () => {
@@ -360,16 +401,42 @@ const Home = () => {
             </p>
             
             <div className="max-w-lg mx-auto">
-              <div className="flex flex-col sm:flex-row gap-4">
-                <input
-                  type="email"
-                  placeholder="Enter your email address"
-                  className="flex-1 px-6 py-4 rounded-2xl bg-gray-800/50 backdrop-blur-sm border border-gray-600/50 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500/50 transition-all duration-300 text-lg"
-                />
-                <button className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-4 rounded-2xl font-bold hover:from-blue-700 hover:to-purple-700 transition-all duration-300 transform hover:scale-105 shadow-xl">
-                  Subscribe
-                </button>
-              </div>
+              <form onSubmit={handleNewsletterSubscribe}>
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="Enter your email address"
+                    className="flex-1 px-6 py-4 rounded-2xl bg-gray-800/50 backdrop-blur-sm border border-gray-600/50 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500/50 transition-all duration-300 text-lg"
+                    disabled={isSubscribing}
+                  />
+                  <button 
+                    type="submit"
+                    disabled={isSubscribing}
+                    className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-4 rounded-2xl font-bold hover:from-blue-700 hover:to-purple-700 transition-all duration-300 transform hover:scale-105 shadow-xl disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+                  >
+                    {isSubscribing ? 'Subscribing...' : 'Subscribe'}
+                  </button>
+                </div>
+              </form>
+              
+              {/* Subscription Message */}
+              {subscriptionMessage.text && (
+                <div className={`mt-4 p-4 rounded-xl flex items-center gap-3 ${
+                  subscriptionMessage.type === 'success' 
+                    ? 'bg-green-900/30 border border-green-500/30 text-green-300'
+                    : 'bg-red-900/30 border border-red-500/30 text-red-300'
+                }`}>
+                  {subscriptionMessage.type === 'success' ? (
+                    <CheckCircle className="w-5 h-5 text-green-400" />
+                  ) : (
+                    <AlertCircle className="w-5 h-5 text-red-400" />
+                  )}
+                  <span className="text-sm font-medium">{subscriptionMessage.text}</span>
+                </div>
+              )}
+              
               <p className="text-sm text-gray-400 mt-6">
                 No spam, unsubscribe anytime.
               </p>
