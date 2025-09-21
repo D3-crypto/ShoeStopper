@@ -113,7 +113,7 @@ const Home = () => {
   ];
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-gray-900 to-black">
       {/* Hero Section */}
       <section className="relative overflow-hidden bg-gradient-to-br from-slate-900 via-blue-900/20 to-purple-900/20 min-h-screen flex items-center">
         {/* Animated Background Elements */}
