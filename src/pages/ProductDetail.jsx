@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Heart, ShoppingCart, Plus, Minus, ArrowLeft, Share2 } from 'lucide-react';
+import { Heart, ShoppingCart, Plus, Minus, ArrowLeft, Share2, X, Ruler } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import { productsAPI } from '../utils/api';
 import { toast } from 'react-toastify';
@@ -22,6 +22,7 @@ const ProductDetail = () => {
   const [selectedColor, setSelectedColor] = useState('');
   const [quantity, setQuantity] = useState(1);
   const [selectedVariant, setSelectedVariant] = useState(null);
+  const [showSizeGuide, setShowSizeGuide] = useState(false);
 
   useEffect(() => {
     const fetchProductDetails = async () => {
@@ -246,6 +247,16 @@ const ProductDetail = () => {
             {/* Size Selection */}
             {variants.length > 0 && (
               <div className="mt-8">
+                <div className="flex justify-between items-center mb-4">
+                  <h3 className="text-sm font-medium text-gray-200">Size</h3>
+                  <button
+                    onClick={() => setShowSizeGuide(true)}
+                    className="flex items-center gap-2 text-blue-400 hover:text-blue-300 text-sm font-medium transition-colors"
+                  >
+                    <Ruler className="h-4 w-4" />
+                    Size Guide
+                  </button>
+                </div>
                 <TouchSizeSelector
                   variants={variants}
                   selectedSize={selectedSize}
@@ -349,10 +360,23 @@ const ProductDetail = () => {
         </div>
       </div>
 
-      {/* Size Guide Section */}
-      {product && (
-        <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
-          <SizeGuide product={product} />
+      {/* Size Guide Popup Modal */}
+      {showSizeGuide && product && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-gray-900 rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="flex justify-between items-center p-6 border-b border-gray-700">
+              <h2 className="text-2xl font-bold text-white">Size Guide</h2>
+              <button
+                onClick={() => setShowSizeGuide(false)}
+                className="p-2 hover:bg-gray-700 rounded-lg transition-colors"
+              >
+                <X className="h-6 w-6 text-gray-400" />
+              </button>
+            </div>
+            <div className="p-6">
+              <SizeGuide product={product} />
+            </div>
+          </div>
         </div>
       )}
 
