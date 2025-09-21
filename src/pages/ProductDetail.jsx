@@ -167,12 +167,12 @@ const ProductDetail = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 py-8">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-gray-900 to-slate-800 py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Back Button */}
         <button
           onClick={() => navigate(-1)}
-          className="flex items-center text-gray-600 hover:text-gray-900 mb-6 transition-colors"
+          className="flex items-center text-gray-300 hover:text-white mb-6 transition-colors"
         >
           <ArrowLeft className="h-5 w-5 mr-2" />
           Back
@@ -188,8 +188,8 @@ const ProductDetail = () => {
                   <button
                     key={index}
                     onClick={() => setSelectedImage(index)}
-                    className={`relative h-24 bg-white/80 backdrop-blur-sm rounded-xl flex items-center justify-center text-sm font-medium uppercase text-gray-900 cursor-pointer hover:bg-white/90 focus:outline-none focus:ring focus:ring-offset-4 focus:ring-opacity-25 shadow-md border border-gray-100 ${
-                      selectedImage === index ? 'ring-2 ring-blue-500 bg-white' : ''
+                    className={`relative h-24 bg-gray-800/60 backdrop-blur-sm rounded-xl flex items-center justify-center text-sm font-medium uppercase text-gray-200 cursor-pointer hover:bg-gray-700/60 focus:outline-none focus:ring focus:ring-offset-4 focus:ring-opacity-25 shadow-md border border-gray-600 ${
+                      selectedImage === index ? 'ring-2 ring-blue-500 bg-gray-700' : ''
                     }`}
                   >
                     <span className="sr-only">Image {index + 1}</span>
@@ -204,7 +204,7 @@ const ProductDetail = () => {
             </div>
 
             {/* Main Image */}
-            <div className="w-full aspect-square bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
+            <div className="w-full aspect-square bg-gray-800/60 backdrop-blur-sm rounded-2xl shadow-xl border border-gray-600 overflow-hidden">
               <img
                 src={product.images[selectedImage] || product.images[0]}
                 alt={product.title}
@@ -215,14 +215,14 @@ const ProductDetail = () => {
 
           {/* Product Info */}
           <div className="mt-10 px-4 sm:px-0 sm:mt-16 lg:mt-0">
-            <div className="bg-white/80 backdrop-blur-md rounded-3xl p-8 shadow-xl border border-gray-100">
-              <h1 className="text-3xl font-bold tracking-tight bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+            <div className="bg-gray-900/40 backdrop-blur-md rounded-3xl p-8 shadow-xl border border-gray-700/50">
+              <h1 className="text-3xl font-bold tracking-tight bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
                 {product.title}
               </h1>
 
               <div className="mt-3">
                 <h2 className="sr-only">Product information</h2>
-                <p className="text-3xl tracking-tight text-gray-900 font-bold">
+                <p className="text-3xl tracking-tight text-white font-bold">
                   {selectedVariant ? formatPrice(selectedVariant.price) : formatPrice(product.price)}
                 </p>
               </div>
