@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { Filter, Grid, List, ChevronDown, X, Sliders } from 'lucide-react';
 import ProductCard from '../components/ProductCard';
+import SearchAndFilter from '../components/SearchAndFilter';
 import { productsAPI } from '../utils/api';
 
 const Products = () => {
@@ -70,6 +71,13 @@ const Products = () => {
     setSearchParams({});
   };
 
+  const handleSearch = (searchTerm) => {
+    setFilters(prev => ({
+      ...prev,
+      search: searchTerm
+    }));
+  };
+
   const getActiveFiltersCount = () => {
     return filters.categories.length + (filters.search ? 1 : 0);
   };
@@ -97,6 +105,15 @@ const Products = () => {
 
           {/* Controls Bar */}
           <div className="bg-gray-900/40 backdrop-blur-md rounded-3xl p-6 shadow-lg border border-gray-700/50">
+            {/* Advanced Search and Filter Component */}
+            <div className="mb-6">
+              <SearchAndFilter 
+                onFiltersChange={(newFilters) => setFilters(newFilters)}
+                onSearch={handleSearch}
+                initialFilters={filters}
+              />
+            </div>
+            
             <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
               {/* Filter Button & Active Count */}
               <div className="flex items-center space-x-4">

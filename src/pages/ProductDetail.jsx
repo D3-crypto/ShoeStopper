@@ -7,6 +7,7 @@ import { toast } from 'react-toastify';
 import TouchSizeSelector from '../components/TouchSizeSelector';
 import ProductReviews from '../components/ProductReviews';
 import RecentlyViewed from '../components/RecentlyViewed';
+import SizeGuide from '../components/SizeGuide';
 
 const ProductDetail = () => {
   const { id } = useParams();
@@ -346,6 +347,25 @@ const ProductDetail = () => {
             </div>
           </div>
         </div>
+      </div>
+
+      {/* Size Guide Section */}
+      {product && (
+        <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+          <SizeGuide product={product} />
+        </div>
+      )}
+
+      {/* Product Reviews Section */}
+      {product && (
+        <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+          <ProductReviews productId={id} />
+        </div>
+      )}
+
+      {/* Recently Viewed Products */}
+      <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+        <RecentlyViewed currentProductId={id} />
       </div>
     </div>
   );
