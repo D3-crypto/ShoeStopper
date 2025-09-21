@@ -69,11 +69,24 @@ const SizeGuide = ({ product, onClose }) => {
   ];
 
   return (
-    <div className="size-guide-overlay" onClick={onClose}>
+    <div 
+      className="size-guide-overlay" 
+      onClick={onClose}
+      style={{ zIndex: 9999 }}
+    >
       <div className="size-guide-modal" onClick={e => e.stopPropagation()}>
         <div className="size-guide-header">
           <h2>Size Guide</h2>
-          <button className="close-btn" onClick={onClose}>×</button>
+          <button 
+            className="close-btn" 
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              if (onClose) onClose();
+            }}
+          >
+            ×
+          </button>
         </div>
 
         <div className="size-guide-tabs">

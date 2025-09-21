@@ -106,14 +106,14 @@ const ProductReviews = ({ productId }) => {
   };
 
   const renderStars = (rating, size = 'medium') => {
-    const sizeClass = size === 'large' ? 'star-large' : size === 'small' ? 'star-small' : 'star-medium';
+    const sizeClass = size === 'large' ? 'text-2xl' : size === 'small' ? 'text-sm' : 'text-lg';
     
     return (
-      <div className={`stars ${sizeClass}`}>
+      <div className={`flex items-center gap-1 ${sizeClass}`}>
         {[1, 2, 3, 4, 5].map(star => (
           <span 
             key={star} 
-            className={star <= rating ? 'star filled' : 'star'}
+            className={star <= rating ? 'text-yellow-400' : 'text-gray-600'}
           >
             ★
           </span>
@@ -124,22 +124,23 @@ const ProductReviews = ({ productId }) => {
 
   const renderRatingDistribution = () => {
     return (
-      <div className="rating-distribution">
+      <div className="space-y-3">
+        <h4 className="font-semibold text-white mb-4">Rating Distribution</h4>
         {[5, 4, 3, 2, 1].map(rating => {
           const dist = ratingDistribution.find(d => d._id === rating);
           const count = dist ? dist.count : 0;
           const percentage = totalReviews > 0 ? (count / totalReviews) * 100 : 0;
           
           return (
-            <div key={rating} className="rating-bar">
-              <span className="rating-label">{rating} ★</span>
-              <div className="bar-container">
+            <div key={rating} className="flex items-center gap-3">
+              <span className="text-yellow-400 w-8">{rating} ★</span>
+              <div className="flex-1 bg-gray-700 rounded-full h-2">
                 <div 
-                  className="bar-fill" 
+                  className="bg-gradient-to-r from-blue-500 to-purple-500 h-2 rounded-full transition-all duration-500" 
                   style={{ width: `${percentage}%` }}
                 ></div>
               </div>
-              <span className="rating-count">({count})</span>
+              <span className="text-gray-300 text-sm w-8">({count})</span>
             </div>
           );
         })}
@@ -148,27 +149,37 @@ const ProductReviews = ({ productId }) => {
   };
 
   if (loading) {
-    return <div className="reviews-loading">Loading reviews...</div>;
+    return (
+      <div className="bg-gray-900/40 backdrop-blur-md rounded-3xl p-8 shadow-xl border border-gray-700/50">
+        <div className="text-center text-gray-300">Loading reviews...</div>
+      </div>
+    );
   }
 
   return (
-    <div className="product-reviews">
-      <div className="reviews-header">
-        <h3>Customer Reviews</h3>
+    <div className="bg-gray-900/40 backdrop-blur-md rounded-3xl p-8 shadow-xl border border-gray-700/50">
+      <div className="mb-8">
+        <h3 className="text-3xl font-bold mb-6 bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+          Customer Reviews
+        </h3>
         
-        <div className="reviews-summary">
-          <div className="average-rating">
-            <div className="rating-number">{averageRating}</div>
-            {renderStars(Math.round(averageRating), 'large')}
-            <div className="total-reviews">Based on {totalReviews} reviews</div>
+        <div className="grid md:grid-cols-2 gap-8 mb-8">
+          <div className="bg-gray-800/60 backdrop-blur-sm rounded-2xl p-6 border border-gray-600">
+            <div className="text-center">
+              <div className="text-4xl font-bold text-white mb-2">{averageRating}</div>
+              {renderStars(Math.round(averageRating), 'large')}
+              <div className="text-gray-300 mt-2">Based on {totalReviews} reviews</div>
+            </div>
           </div>
           
-          {renderRatingDistribution()}
+          <div className="bg-gray-800/60 backdrop-blur-sm rounded-2xl p-6 border border-gray-600">
+            {renderRatingDistribution()}
+          </div>
         </div>
         
-        <div className="reviews-actions">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <button 
-            className="write-review-btn"
+            className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-xl transition-colors disabled:bg-gray-600 disabled:cursor-not-allowed"
             onClick={() => setShowReviewForm(true)}
             disabled={!user}
           >
@@ -178,7 +189,7 @@ const ProductReviews = ({ productId }) => {
           <select 
             value={sortBy} 
             onChange={(e) => setSortBy(e.target.value)}
-            className="sort-select"
+            className="bg-gray-800/60 border border-gray-600 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             <option value="newest">Newest First</option>
             <option value="oldest">Oldest First</option>
@@ -189,7 +200,11 @@ const ProductReviews = ({ productId }) => {
         </div>
       </div>
 
-      {error && <div className="error-message">{error}</div>}
+      {error && (
+        <div className="bg-red-900/50 border border-red-700 text-red-300 px-4 py-3 rounded-xl mb-6">
+          {error}
+        </div>
+      )}
 
       {/* Review Form Modal */}
       {showReviewForm && (
@@ -281,44 +296,52 @@ const ProductReviews = ({ productId }) => {
       )}
 
       {/* Reviews List */}
-      <div className="reviews-list">
+      <div className="space-y-6">
         {reviews.length === 0 ? (
-          <div className="no-reviews">
-            <p>No reviews yet. Be the first to review this product!</p>
+          <div className="text-center py-12 bg-gray-800/60 backdrop-blur-sm rounded-2xl border border-gray-600">
+            <p className="text-gray-300 text-lg">No reviews yet. Be the first to review this product!</p>
           </div>
         ) : (
           reviews.map(review => (
-            <div key={review._id} className="review-item">
-              <div className="review-header">
-                <div className="reviewer-info">
-                  <span className="reviewer-name">{review.userId?.name || 'Anonymous'}</span>
-                  {review.verified && <span className="verified-badge">Verified Purchase</span>}
+            <div key={review._id} className="bg-gray-800/60 backdrop-blur-sm rounded-2xl p-6 border border-gray-600">
+              <div className="flex justify-between items-start mb-4">
+                <div className="flex items-center gap-3">
+                  <span className="font-semibold text-white">{review.userId?.name || 'Anonymous'}</span>
+                  {review.verified && (
+                    <span className="bg-green-600 text-white text-xs px-2 py-1 rounded-full">
+                      Verified Purchase
+                    </span>
+                  )}
                 </div>
-                <div className="review-date">
+                <div className="text-gray-400 text-sm">
                   {new Date(review.createdAt).toLocaleDateString()}
                 </div>
               </div>
               
-              <div className="review-rating">
+              <div className="flex items-center gap-3 mb-3">
                 {renderStars(review.rating, 'small')}
-                <span className="review-title">{review.title}</span>
+                <span className="font-medium text-white">{review.title}</span>
               </div>
               
-              <div className="review-content">
-                <p>{review.comment}</p>
+              <div className="mb-4">
+                <p className="text-gray-300 leading-relaxed">{review.comment}</p>
               </div>
               
-              <div className="review-details">
-                {review.size && <span className="review-size">Size: {review.size}</span>}
-                <span className="review-fit">
+              <div className="flex items-center gap-4 mb-4 text-sm">
+                {review.size && (
+                  <span className="bg-blue-600/20 text-blue-400 px-3 py-1 rounded-full">
+                    Size: {review.size}
+                  </span>
+                )}
+                <span className="bg-purple-600/20 text-purple-400 px-3 py-1 rounded-full">
                   Fit: {review.fit === 'runs_small' ? 'Runs Small' : 
                         review.fit === 'runs_large' ? 'Runs Large' : 'True to Size'}
                 </span>
               </div>
               
-              <div className="review-actions">
+              <div className="flex justify-between items-center">
                 <button 
-                  className="helpful-btn"
+                  className="flex items-center gap-2 text-gray-400 hover:text-blue-400 transition-colors disabled:opacity-50"
                   onClick={() => handleHelpful(review._id)}
                   disabled={!user}
                 >
