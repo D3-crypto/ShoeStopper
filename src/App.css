@@ -1,16 +1,14 @@
 /* Additional custom styles for the app */
 
-/* Global dark theme */
+/* Reset global styles to allow individual page backgrounds */
 body {
-  background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #111827 100%);
-  min-height: 100vh;
   margin: 0;
   padding: 0;
+  min-height: 100vh;
 }
 
 #root {
   min-height: 100vh;
-  background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #111827 100%);
 }
 
 /* Smooth transitions */
