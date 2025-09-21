@@ -62,38 +62,38 @@ const Contact = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 py-8">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 py-8">
       <div className="container mx-auto px-4">
         {/* Header */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-black text-gray-800 mb-4">
+          <h1 className="text-4xl font-black text-white mb-4">
             Contact Us
           </h1>
-          <p className="text-gray-600 text-lg max-w-2xl mx-auto">
+          <p className="text-gray-300 text-lg max-w-2xl mx-auto">
             Have a question or need help with your order? We're here to assist you!
           </p>
         </div>
 
         <div className="grid lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
           {/* Contact Information */}
-          <div className="bg-white rounded-3xl p-8 shadow-xl border border-gray-100">
-            <h2 className="text-2xl font-bold text-gray-800 mb-8 flex items-center">
-              <MessageCircle className="w-6 h-6 mr-3 text-blue-600" />
+          <div className="bg-gray-900/60 backdrop-blur-lg rounded-3xl p-8 shadow-2xl border border-gray-700/60">
+            <h2 className="text-2xl font-bold text-white mb-8 flex items-center">
+              <MessageCircle className="w-6 h-6 mr-3 text-blue-400" />
               Get in Touch
             </h2>
             
             <div className="space-y-6">
               {/* Email */}
-              <div className="flex items-start space-x-4 p-4 bg-blue-50 rounded-2xl">
+              <div className="flex items-start space-x-4 p-4 bg-blue-900/40 rounded-2xl border border-blue-700/30">
                 <div className="bg-blue-600 p-3 rounded-2xl">
                   <Mail className="w-6 h-6 text-white" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-gray-800 mb-1">Email Support</h3>
-                  <p className="text-gray-600 mb-2">For general inquiries and support</p>
+                  <h3 className="font-semibold text-white mb-1">Email Support</h3>
+                  <p className="text-gray-300 mb-2">For general inquiries and support</p>
                   <a 
                     href="mailto:sonujha5094@gmail.com" 
-                    className="text-blue-600 font-medium hover:text-blue-700 transition-colors"
+                    className="text-blue-400 font-medium hover:text-blue-300 transition-colors"
                   >
                     sonujha5094@gmail.com
                   </a>
@@ -101,16 +101,16 @@ const Contact = () => {
               </div>
 
               {/* Phone */}
-              <div className="flex items-start space-x-4 p-4 bg-green-50 rounded-2xl">
+              <div className="flex items-start space-x-4 p-4 bg-green-900/40 rounded-2xl border border-green-700/30">
                 <div className="bg-green-600 p-3 rounded-2xl">
                   <Phone className="w-6 h-6 text-white" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-gray-800 mb-1">Phone Support</h3>
-                  <p className="text-gray-600 mb-2">Available Mon-Fri, 9 AM - 6 PM</p>
+                  <h3 className="font-semibold text-white mb-1">Phone Support</h3>
+                  <p className="text-gray-300 mb-2">Available Mon-Fri, 9 AM - 6 PM</p>
                   <a 
                     href="tel:+919147737124" 
-                    className="text-green-600 font-medium hover:text-green-700 transition-colors"
+                    className="text-green-400 font-medium hover:text-green-300 transition-colors"
                   >
                     +91 9147737124
                   </a>
@@ -118,14 +118,14 @@ const Contact = () => {
               </div>
 
               {/* Address */}
-              <div className="flex items-start space-x-4 p-4 bg-purple-50 rounded-2xl">
+              <div className="flex items-start space-x-4 p-4 bg-purple-900/40 rounded-2xl border border-purple-700/30">
                 <div className="bg-purple-600 p-3 rounded-2xl">
                   <MapPin className="w-6 h-6 text-white" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-gray-800 mb-1">Visit Our Store</h3>
-                  <p className="text-gray-600 mb-2">Come visit our flagship store</p>
-                  <address className="text-purple-600 not-italic">
+                  <h3 className="font-semibold text-white mb-1">Visit Our Store</h3>
+                  <p className="text-gray-300 mb-2">Come visit our flagship store</p>
+                  <address className="text-purple-400 not-italic">
                     123 Fashion Street<br />
                     Style City, SC 12345<br />
                     United States
@@ -135,35 +135,35 @@ const Contact = () => {
             </div>
 
             {/* Business Hours */}
-            <div className="mt-8 p-6 bg-gray-50 rounded-2xl">
-              <h3 className="font-semibold text-gray-800 mb-4">Business Hours</h3>
+            <div className="mt-8 p-6 bg-gray-800/40 rounded-2xl border border-gray-600/30">
+              <h3 className="font-semibold text-white mb-4">Business Hours</h3>
               <div className="space-y-2 text-sm">
                 <div className="flex justify-between">
-                  <span className="text-gray-600">Monday - Friday</span>
-                  <span className="font-medium">9:00 AM - 6:00 PM</span>
+                  <span className="text-gray-300">Monday - Friday</span>
+                  <span className="font-medium text-white">9:00 AM - 6:00 PM</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-gray-600">Saturday</span>
-                  <span className="font-medium">10:00 AM - 4:00 PM</span>
+                  <span className="text-gray-300">Saturday</span>
+                  <span className="font-medium text-white">10:00 AM - 4:00 PM</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-gray-600">Sunday</span>
-                  <span className="font-medium">Closed</span>
+                  <span className="text-gray-300">Sunday</span>
+                  <span className="font-medium text-white">Closed</span>
                 </div>
               </div>
             </div>
           </div>
 
           {/* Contact Form */}
-          <div className="bg-white rounded-3xl p-8 shadow-xl border border-gray-100">
-            <h2 className="text-2xl font-bold text-gray-800 mb-8">
+          <div className="bg-gray-900/60 backdrop-blur-lg rounded-3xl p-8 shadow-2xl border border-gray-700/60">
+            <h2 className="text-2xl font-bold text-white mb-8">
               Send Us a Message
             </h2>
 
             <form onSubmit={handleSendQuery} className="space-y-6">
               {/* Phone Number */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-200 mb-2">
                   Phone Number *
                 </label>
                 <input
@@ -172,14 +172,14 @@ const Contact = () => {
                   value={formData.phone}
                   onChange={handleInputChange}
                   placeholder="Enter your phone number"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
+                  className="w-full px-4 py-3 bg-gray-800/60 border border-gray-600 rounded-2xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
                   required
                 />
               </div>
 
               {/* Email */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-200 mb-2">
                   Email Address *
                 </label>
                 <input
@@ -188,14 +188,14 @@ const Contact = () => {
                   value={formData.email}
                   onChange={handleInputChange}
                   placeholder="Enter your email address"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
+                  className="w-full px-4 py-3 bg-gray-800/60 border border-gray-600 rounded-2xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
                   required
                 />
               </div>
 
               {/* Order ID */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-200 mb-2">
                   Order ID <span className="text-gray-400">(Optional)</span>
                 </label>
                 <input
@@ -204,13 +204,13 @@ const Contact = () => {
                   value={formData.orderId}
                   onChange={handleInputChange}
                   placeholder="Enter your order ID if applicable"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
+                  className="w-full px-4 py-3 bg-gray-800/60 border border-gray-600 rounded-2xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
                 />
               </div>
 
               {/* Issue Description */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-200 mb-2">
                   Describe Your Issue *
                 </label>
                 <textarea
@@ -219,7 +219,7 @@ const Contact = () => {
                   onChange={handleInputChange}
                   placeholder="Please describe your issue or question in detail..."
                   rows={5}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 resize-none"
+                  className="w-full px-4 py-3 bg-gray-800/60 border border-gray-600 rounded-2xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 resize-none"
                   required
                 />
               </div>
@@ -244,7 +244,7 @@ const Contact = () => {
               </button>
             </form>
 
-            <p className="text-sm text-gray-500 mt-4 text-center">
+            <p className="text-sm text-gray-400 mt-4 text-center">
               We typically respond within 24 hours during business days.
             </p>
           </div>

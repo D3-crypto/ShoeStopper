@@ -52,16 +52,16 @@ const Orders = () => {
   const getStatusColor = (status) => {
     switch (status?.toLowerCase()) {
       case 'delivered':
-        return 'bg-green-100 text-green-800';
+        return 'bg-green-900/60 text-green-300 border-green-700/30';
       case 'cancelled':
-        return 'bg-red-100 text-red-800';
+        return 'bg-red-900/60 text-red-300 border-red-700/30';
       case 'processing':
       case 'confirmed':
-        return 'bg-blue-100 text-blue-800';
+        return 'bg-blue-900/60 text-blue-300 border-blue-700/30';
       case 'shipped':
-        return 'bg-purple-100 text-purple-800';
+        return 'bg-purple-900/60 text-purple-300 border-purple-700/30';
       default:
-        return 'bg-gray-100 text-gray-800';
+        return 'bg-gray-800/60 text-gray-300 border-gray-600/30';
     }
   };
 
@@ -79,10 +79,10 @@ const Orders = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 py-12 px-4">
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 py-12 px-4">
         <div className="max-w-6xl mx-auto">
           <div className="flex items-center justify-center py-20">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-400"></div>
           </div>
         </div>
       </div>
@@ -90,23 +90,23 @@ const Orders = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 py-12 px-4">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 py-12 px-4">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-black bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-4">
+          <h1 className="text-4xl font-black bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent mb-4">
             My Orders
           </h1>
-          <p className="text-gray-600">Track your order history and status</p>
+          <p className="text-gray-300">Track your order history and status</p>
         </div>
 
         {orders.length === 0 ? (
           /* Empty State */
-          <div className="bg-white/70 backdrop-blur-xl rounded-3xl shadow-xl border border-white/20 p-12 text-center">
+          <div className="bg-gray-900/60 backdrop-blur-lg rounded-3xl shadow-2xl border border-gray-700/60 p-12 text-center">
             <div className="max-w-md mx-auto">
-              <Package className="w-24 h-24 mx-auto mb-6 text-gray-300" />
-              <h2 className="text-2xl font-bold text-gray-800 mb-4">No orders yet</h2>
-              <p className="text-gray-600 mb-8 leading-relaxed">
+              <Package className="w-24 h-24 mx-auto mb-6 text-gray-400" />
+              <h2 className="text-2xl font-bold text-white mb-4">No orders yet</h2>
+              <p className="text-gray-300 mb-8 leading-relaxed">
                 Looks like you haven't placed any orders yet. 
                 Discover our amazing collection and place your first order!
               </p>
@@ -123,26 +123,26 @@ const Orders = () => {
           /* Orders List */
           <div className="space-y-6">
             {orders.map((order) => (
-              <div key={order._id} className="bg-white/70 backdrop-blur-xl rounded-3xl shadow-xl border border-white/20 p-8">
+              <div key={order._id} className="bg-gray-900/60 backdrop-blur-lg rounded-3xl shadow-2xl border border-gray-700/60 p-8">
                 {/* Order Header */}
-                <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6 pb-6 border-b border-gray-200">
+                <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6 pb-6 border-b border-gray-600/40">
                   <div className="mb-4 md:mb-0">
                     <div className="flex items-center space-x-2 mb-2">
-                      <h3 className="text-xl font-bold text-gray-900">
+                      <h3 className="text-xl font-bold text-white">
                         Order #{order._id?.slice(-8)?.toUpperCase()}
                       </h3>
-                      <span className={`px-3 py-1 rounded-full text-sm font-semibold flex items-center space-x-1 ${getStatusColor(order.status)}`}>
+                      <span className={`px-3 py-1 rounded-full text-sm font-semibold flex items-center space-x-1 border ${getStatusColor(order.status)}`}>
                         {getStatusIcon(order.status)}
                         <span>{order.status || 'Pending'}</span>
                       </span>
                     </div>
-                    <p className="text-gray-600">
+                    <p className="text-gray-300">
                       Placed on {formatDate(order.createdAt)}
                     </p>
                   </div>
                   
                   <div className="flex flex-col md:items-end">
-                    <div className="text-2xl font-bold text-gray-900 mb-2">
+                    <div className="text-2xl font-bold text-white mb-2">
                       ${order.totalAmount?.toLocaleString() || 'N/A'}
                     </div>
                     <button
@@ -165,10 +165,10 @@ const Orders = () => {
                         className="w-16 h-16 object-cover rounded-xl"
                       />
                       <div className="flex-1">
-                        <h4 className="font-semibold text-gray-900">
+                        <h4 className="font-semibold text-white">
                           {item.productId?.name || 'Product Name'}
                         </h4>
-                        <p className="text-sm text-gray-600">
+                        <p className="text-sm text-gray-300">
                           Quantity: {item.quantity} • ${item.price?.toLocaleString()}
                         </p>
                       </div>
@@ -176,7 +176,7 @@ const Orders = () => {
                   ))}
                   
                   {order.items?.length > 2 && (
-                    <p className="text-sm text-gray-600 italic">
+                    <p className="text-sm text-gray-400 italic">
                       +{order.items.length - 2} more items
                     </p>
                   )}
@@ -184,10 +184,10 @@ const Orders = () => {
 
                 {/* Delivery Address */}
                 {order.address && (
-                  <div className="mt-6 pt-6 border-t border-gray-200">
-                    <h4 className="font-semibold text-gray-900 mb-2">Delivery Address</h4>
-                    <div className="text-sm text-gray-600">
-                      <p className="font-medium">{order.address.name}</p>
+                  <div className="mt-6 pt-6 border-t border-gray-600/40">
+                    <h4 className="font-semibold text-white mb-2">Delivery Address</h4>
+                    <div className="text-sm text-gray-300">
+                      <p className="font-medium text-white">{order.address.name}</p>
                       <p>{order.address.street}</p>
                       <p>{order.address.city}, {order.address.state} - {order.address.pincode}</p>
                       {order.address.phone && <p>Phone: {order.address.phone}</p>}
@@ -204,7 +204,7 @@ const Orders = () => {
           <div className="text-center mt-12">
             <button
               onClick={() => navigate('/products')}
-              className="bg-white/70 backdrop-blur-xl border border-white/20 text-gray-700 px-8 py-4 rounded-2xl font-semibold hover:bg-white hover:shadow-lg transition-all duration-300 transform hover:scale-105 flex items-center justify-center space-x-2 mx-auto"
+              className="bg-gray-800/60 backdrop-blur-lg border border-gray-600/40 text-gray-200 px-8 py-4 rounded-2xl font-semibold hover:bg-gray-700/60 hover:shadow-lg transition-all duration-300 transform hover:scale-105 flex items-center justify-center space-x-2 mx-auto"
             >
               <span>Continue Shopping</span>
               <ArrowRight className="w-5 h-5" />
