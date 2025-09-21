@@ -4,6 +4,9 @@ import { Heart, ShoppingCart, Plus, Minus, ArrowLeft, Share2 } from 'lucide-reac
 import { useCart } from '../context/CartContext';
 import { productsAPI } from '../utils/api';
 import { toast } from 'react-toastify';
+import TouchSizeSelector from '../components/TouchSizeSelector';
+import ProductReviews from '../components/ProductReviews';
+import RecentlyViewed from '../components/RecentlyViewed';
 
 const ProductDetail = () => {
   const { id } = useParams();
@@ -97,20 +100,12 @@ const ProductDetail = () => {
     }).format(price);
   };
 
-  const getAvailableSizes = () => {
-    return [...new Set(variants.map(v => v.size))].sort();
-  };
-
   const getAvailableColors = () => {
     return [...new Set(variants.map(v => v.color))];
   };
 
   const getColorsForSize = (size) => {
     return variants.filter(v => v.size === size).map(v => v.color);
-  };
-
-  const getSizesForColor = (color) => {
-    return variants.filter(v => v.color === color).map(v => v.size);
   };
 
   const handleShare = async () => {
@@ -250,33 +245,13 @@ const ProductDetail = () => {
             {/* Size Selection */}
             {variants.length > 0 && (
               <div className="mt-8">
-                <div className="flex items-justify-between">
-                  <h3 className="text-sm font-medium text-gray-200">Size</h3>
-                </div>
-
-                <div className="mt-4">
-                  <div className="flex items-center space-x-3">
-                    {getAvailableSizes().map((size) => {
-                      const isAvailable = getSizesForColor(selectedColor).includes(size);
-                      return (
-                        <button
-                          key={size}
-                          onClick={() => handleSizeChange(size)}
-                          disabled={!isAvailable}
-                          className={`group relative border rounded-md py-3 px-4 flex items-center justify-center text-sm font-medium uppercase hover:bg-gray-700/60 focus:outline-none sm:flex-1 ${
-                            selectedSize === size
-                              ? 'bg-blue-600 border-transparent text-white hover:bg-blue-700'
-                              : isAvailable
-                              ? 'bg-gray-800/60 border-gray-600 text-gray-200 cursor-pointer'
-                              : 'bg-gray-900/60 border-gray-700 text-gray-500 cursor-not-allowed'
-                          }`}
-                        >
-                          {size}
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
+                <TouchSizeSelector
+                  variants={variants}
+                  selectedSize={selectedSize}
+                  onSizeSelect={handleSizeChange}
+                  showStock={true}
+                  layout="grid"
+                />
               </div>
             )}
 

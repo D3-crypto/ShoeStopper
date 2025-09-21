@@ -1,0 +1,403 @@
+/* Touch Size Selector Styles */
+.touch-size-selector {
+  width: 100%;
+  margin: 20px 0;
+  user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+}
+
+.size-selector-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.size-selector-header h3 {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.selected-size-info {
+  font-size: 0.9rem;
+  color: #3b82f6;
+  font-weight: 500;
+}
+
+/* Grid Layout (Default) */
+.sizes-container.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+  gap: 12px;
+  max-width: 400px;
+}
+
+/* Horizontal Layout */
+.sizes-container.horizontal {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: flex-start;
+}
+
+/* Size Button Base Styles */
+.size-button {
+  position: relative;
+  border: 2px solid #e2e8f0;
+  background: white;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-weight: 500;
+  font-size: 1rem;
+  min-height: 56px;
+  
+  /* Touch optimizations */
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+}
+
+/* Grid Layout Button */
+.size-button.grid {
+  aspect-ratio: 1;
+  min-width: 60px;
+}
+
+/* Horizontal Layout Button */
+.size-button.horizontal {
+  padding: 12px 16px;
+  min-width: 60px;
+  height: 56px;
+}
+
+.size-text {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #374151;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.stock-indicator {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.stock-status {
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 2px 4px;
+  border-radius: 4px;
+  text-transform: uppercase;
+}
+
+.stock-status.in {
+  color: #10b981;
+  background: rgba(16, 185, 129, 0.1);
+}
+
+.stock-status.low {
+  color: #f59e0b;
+  background: rgba(245, 158, 11, 0.1);
+}
+
+.stock-status.out {
+  color: #ef4444;
+  background: rgba(239, 68, 68, 0.1);
+}
+
+/* Touch Feedback */
+.touch-feedback {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(59, 130, 246, 0.1);
+  opacity: 0;
+  transform: scale(0.8);
+  transition: all 0.15s ease;
+  pointer-events: none;
+  border-radius: inherit;
+}
+
+/* Size Button States */
+.size-button:active .touch-feedback {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.size-button.in-stock {
+  border-color: #10b981;
+  color: #065f46;
+}
+
+.size-button.in-stock:hover {
+  border-color: #059669;
+  background: rgba(16, 185, 129, 0.05);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+}
+
+.size-button.low-stock {
+  border-color: #f59e0b;
+  color: #92400e;
+  background: rgba(245, 158, 11, 0.02);
+}
+
+.size-button.low-stock:hover {
+  border-color: #d97706;
+  background: rgba(245, 158, 11, 0.05);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.2);
+}
+
+.size-button.out-of-stock {
+  border-color: #e5e7eb;
+  background: #f9fafb;
+  color: #9ca3af;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.size-button.out-of-stock .size-text {
+  text-decoration: line-through;
+}
+
+.size-button.selected {
+  border-color: #3b82f6;
+  background: #3b82f6;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.3);
+}
+
+.size-button.selected .size-text {
+  color: white;
+}
+
+.size-button.selected .stock-status {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+}
+
+/* Focus styles for accessibility */
+.size-button:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
+}
+
+/* Size Guide Link */
+.size-guide-link {
+  margin-top: 16px;
+  text-align: center;
+}
+
+.size-guide-btn {
+  background: none;
+  border: 1px solid #d1d5db;
+  color: #6b7280;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.size-guide-btn:hover {
+  border-color: #3b82f6;
+  color: #3b82f6;
+  background: rgba(59, 130, 246, 0.05);
+}
+
+/* Stock Legend */
+.stock-legend {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid #e5e7eb;
+  flex-wrap: wrap;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8rem;
+  color: #6b7280;
+}
+
+.legend-indicator {
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+  display: inline-block;
+}
+
+.legend-indicator.in-stock {
+  background: #10b981;
+}
+
+.legend-indicator.low-stock {
+  background: #f59e0b;
+}
+
+.legend-indicator.out-of-stock {
+  background: #e5e7eb;
+}
+
+/* No Sizes Message */
+.no-sizes-message {
+  text-align: center;
+  padding: 40px 20px;
+  color: #6b7280;
+  font-style: italic;
+}
+
+/* Mobile Optimizations */
+@media (max-width: 768px) {
+  .touch-size-selector {
+    margin: 16px 0;
+  }
+
+  .sizes-container.grid {
+    grid-template-columns: repeat(auto-fill, minmax(56px, 1fr));
+    gap: 10px;
+    max-width: 100%;
+  }
+
+  .size-button {
+    min-height: 52px;
+    font-size: 0.95rem;
+  }
+
+  .size-button.grid {
+    min-width: 56px;
+  }
+
+  .size-button.horizontal {
+    min-width: 56px;
+    height: 52px;
+    padding: 10px 14px;
+  }
+
+  .stock-indicator {
+    top: 2px;
+    right: 2px;
+  }
+
+  .stock-status {
+    font-size: 0.65rem;
+    padding: 1px 3px;
+  }
+
+  .stock-legend {
+    gap: 12px;
+  }
+
+  .legend-item {
+    font-size: 0.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .size-selector-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+
+  .sizes-container.grid {
+    grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
+    gap: 8px;
+  }
+
+  .size-button {
+    min-height: 48px;
+    font-size: 0.9rem;
+  }
+
+  .size-button.grid {
+    min-width: 50px;
+  }
+
+  .size-button.horizontal {
+    min-width: 50px;
+    height: 48px;
+    padding: 8px 12px;
+  }
+
+  .sizes-container.horizontal {
+    gap: 6px;
+  }
+
+  .stock-legend {
+    flex-direction: column;
+    gap: 8px;
+    align-items: center;
+  }
+}
+
+/* High DPI / Retina displays */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .size-button {
+    border-width: 1.5px;
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .touch-size-selector {
+    color: #f1f5f9;
+  }
+
+  .size-selector-header h3 {
+    color: #f1f5f9;
+  }
+
+  .size-button {
+    background: #1e293b;
+    border-color: #475569;
+  }
+
+  .size-text {
+    color: #e2e8f0;
+  }
+
+  .size-button.out-of-stock {
+    background: #0f172a;
+    border-color: #334155;
+  }
+
+  .size-guide-btn {
+    background: #1e293b;
+    border-color: #475569;
+    color: #cbd5e1;
+  }
+
+  .legend-item {
+    color: #94a3b8;
+  }
+
+  .no-sizes-message {
+    color: #94a3b8;
+  }
+}

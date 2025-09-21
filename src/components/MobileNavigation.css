@@ -1,0 +1,245 @@
+/* Mobile Navigation Styles */
+.mobile-navigation {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+  z-index: 1000;
+  padding: 0 0 env(safe-area-inset-bottom);
+  transition: transform 0.3s ease;
+  
+  /* Only show on mobile devices */
+  display: none;
+}
+
+.mobile-navigation.visible {
+  transform: translateY(0);
+}
+
+.mobile-navigation.hidden {
+  transform: translateY(100%);
+}
+
+.nav-container {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 8px 16px 12px;
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  color: #64748b;
+  transition: all 0.2s ease;
+  padding: 8px 4px;
+  border-radius: 12px;
+  min-width: 60px;
+  position: relative;
+  
+  /* Touch optimizations */
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+}
+
+.nav-item:hover {
+  color: #3b82f6;
+  background: rgba(59, 130, 246, 0.05);
+}
+
+.nav-item.active {
+  color: #3b82f6;
+  background: rgba(59, 130, 246, 0.1);
+}
+
+.nav-item:active {
+  transform: scale(0.95);
+}
+
+.nav-icon {
+  position: relative;
+  width: 24px;
+  height: 24px;
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nav-icon svg {
+  width: 100%;
+  height: 100%;
+  transition: transform 0.2s ease;
+}
+
+.nav-item.active .nav-icon svg {
+  transform: scale(1.1);
+}
+
+.nav-badge {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background: #ef4444;
+  color: white;
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: 10px;
+  min-width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  border: 2px solid white;
+}
+
+.nav-label {
+  font-size: 0.7rem;
+  font-weight: 500;
+  text-align: center;
+  line-height: 1;
+}
+
+/* Mobile-specific styles */
+@media (max-width: 768px) {
+  .mobile-navigation {
+    display: block;
+  }
+  
+  /* Add bottom padding to body to account for fixed nav */
+  body {
+    padding-bottom: 80px;
+  }
+}
+
+@media (max-width: 480px) {
+  .nav-container {
+    padding: 6px 12px 10px;
+  }
+
+  .nav-item {
+    padding: 6px 2px;
+    min-width: 50px;
+  }
+
+  .nav-icon {
+    width: 22px;
+    height: 22px;
+    margin-bottom: 2px;
+  }
+
+  .nav-label {
+    font-size: 0.65rem;
+  }
+
+  .nav-badge {
+    top: -4px;
+    right: -4px;
+    font-size: 0.65rem;
+    padding: 1px 4px;
+    min-width: 16px;
+    height: 16px;
+  }
+}
+
+/* Landscape orientation adjustments */
+@media (max-width: 768px) and (orientation: landscape) {
+  .nav-container {
+    padding: 4px 16px 6px;
+  }
+
+  .nav-item {
+    padding: 4px 2px;
+  }
+
+  .nav-icon {
+    width: 20px;
+    height: 20px;
+    margin-bottom: 2px;
+  }
+
+  .nav-label {
+    font-size: 0.6rem;
+  }
+}
+
+/* High DPI displays */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .mobile-navigation {
+    border-top-width: 0.5px;
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .mobile-navigation {
+    background: rgba(15, 23, 42, 0.95);
+    border-top-color: rgba(255, 255, 255, 0.1);
+  }
+
+  .nav-item {
+    color: #94a3b8;
+  }
+
+  .nav-item:hover {
+    color: #60a5fa;
+    background: rgba(96, 165, 250, 0.1);
+  }
+
+  .nav-item.active {
+    color: #60a5fa;
+    background: rgba(96, 165, 250, 0.15);
+  }
+
+  .nav-badge {
+    border-color: #0f172a;
+  }
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .mobile-navigation,
+  .nav-item,
+  .nav-icon svg {
+    transition: none;
+  }
+}
+
+/* Focus styles for keyboard navigation */
+.nav-item:focus {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+/* Ensure safe area insets are respected */
+@supports (padding: max(0px)) {
+  .mobile-navigation {
+    padding-bottom: max(12px, env(safe-area-inset-bottom));
+  }
+}
+
+/* Prevent overscroll bounce on iOS */
+.mobile-navigation {
+  overscroll-behavior: contain;
+}
+
+/* Performance optimizations */
+.mobile-navigation {
+  will-change: transform;
+  contain: layout style paint;
+}
+
+.nav-item {
+  contain: layout style;
+}

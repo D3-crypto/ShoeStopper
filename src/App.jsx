@@ -7,6 +7,7 @@ import { AuthProvider } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
 import Header from './components/Header';
 import Footer from './components/Footer';
+import MobileNavigation from './components/MobileNavigation';
 import Home from './pages/Home';
 import Products from './pages/Products';
 import ProductDetail from './pages/ProductDetail';
@@ -17,6 +18,8 @@ import Orders from './pages/Orders';
 import OrderDetails from './pages/OrderDetails';
 import Profile from './pages/Profile';
 import Contact from './pages/Contact';
+import BrandPage from './pages/BrandPage';
+import CartRecovery from './pages/CartRecovery';
 import './App.css';
 
 function App() {
@@ -43,10 +46,13 @@ function App() {
                 <Route path="/order/:id" element={<OrderDetails />} />
                 <Route path="/profile" element={<Profile />} />
                 <Route path="/contact" element={<Contact />} />
+                <Route path="/brand/:brandName" element={<BrandPage />} />
+                <Route path="/cart/recover/:token" element={<CartRecovery />} />
                 {/* Add more routes as we create more pages */}
               </Routes>
             </main>
             <Footer />
+            <MobileNavigation />
             <ToastContainer
               position="top-right"
               autoClose={3000}
