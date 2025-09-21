@@ -17,11 +17,7 @@ const ProductReviews = ({ productId }) => {
 
   // Review form state
   const [reviewForm, setReviewForm] = useState({
-    rating: 5,
-    title: '',
-    comment: '',
-    size: '',
-    fit: 'true_to_size'
+    comment: ''
   });
 
   const fetchReviews = useCallback(async () => {
@@ -67,16 +63,16 @@ const ProductReviews = ({ productId }) => {
     try {
       await api.post('/reviews', {
         productId,
-        ...reviewForm
+        rating: 5, // Default rating
+        title: 'Customer Review', // Default title
+        comment: reviewForm.comment,
+        size: '', // Default empty
+        fit: 'true_to_size' // Default fit
       });
       
       setShowReviewForm(false);
       setReviewForm({
-        rating: 5,
-        title: '',
-        comment: '',
-        size: '',
-        fit: 'true_to_size'
+        comment: ''
       });
       
       fetchReviews(); // Refresh reviews
@@ -208,87 +204,53 @@ const ProductReviews = ({ productId }) => {
 
       {/* Review Form Modal */}
       {showReviewForm && (
-        <div className="review-form-overlay" onClick={() => setShowReviewForm(false)}>
-          <div className="review-form-modal" onClick={e => e.stopPropagation()}>
-            <div className="modal-header">
-              <h4>Write a Review</h4>
-              <button onClick={() => setShowReviewForm(false)}>×</button>
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-gray-900 rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto border border-gray-700">
+            <div className="flex justify-between items-center p-6 border-b border-gray-700">
+              <h4 className="text-2xl font-bold text-white">Write a Review</h4>
+              <button 
+                onClick={() => setShowReviewForm(false)}
+                className="p-2 hover:bg-gray-700 rounded-lg transition-colors"
+              >
+                <span className="text-gray-400 text-2xl">×</span>
+              </button>
             </div>
             
-            <form onSubmit={handleSubmitReview}>
-              <div className="form-group">
-                <label>Rating *</label>
-                <div className="rating-input">
-                  {[1, 2, 3, 4, 5].map(star => (
-                    <button
-                      key={star}
-                      type="button"
-                      className={`star-btn ${star <= reviewForm.rating ? 'active' : ''}`}
-                      onClick={() => setReviewForm({ ...reviewForm, rating: star })}
-                    >
-                      ★
-                    </button>
-                  ))}
-                </div>
-              </div>
-              
-              <div className="form-group">
-                <label htmlFor="review-title">Review Title *</label>
-                <input
-                  id="review-title"
-                  type="text"
-                  value={reviewForm.title}
-                  onChange={(e) => setReviewForm({ ...reviewForm, title: e.target.value })}
-                  required
-                  maxLength={100}
-                  placeholder="Summarize your review"
-                />
-              </div>
-              
-              <div className="form-group">
-                <label htmlFor="review-comment">Your Review *</label>
+            <form onSubmit={handleSubmitReview} className="p-6 space-y-6">
+              {/* Comment Input Only */}
+              <div>
+                <label htmlFor="review-comment" className="block text-sm font-medium text-gray-200 mb-2">
+                  Your Review *
+                </label>
                 <textarea
                   id="review-comment"
                   value={reviewForm.comment}
                   onChange={(e) => setReviewForm({ ...reviewForm, comment: e.target.value })}
                   required
                   maxLength={1000}
-                  rows={4}
-                  placeholder="Tell others about your experience with this product"
+                  rows={6}
+                  placeholder="Tell others about your experience with this product..."
+                  className="w-full bg-gray-800 border border-gray-600 rounded-xl px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
                 />
-              </div>
-              
-              <div className="form-row">
-                <div className="form-group">
-                  <label htmlFor="review-size">Size Purchased</label>
-                  <input
-                    id="review-size"
-                    type="text"
-                    value={reviewForm.size}
-                    onChange={(e) => setReviewForm({ ...reviewForm, size: e.target.value })}
-                    placeholder="e.g., 9, 9.5, 10"
-                  />
-                </div>
-                
-                <div className="form-group">
-                  <label htmlFor="review-fit">How does it fit?</label>
-                  <select
-                    id="review-fit"
-                    value={reviewForm.fit}
-                    onChange={(e) => setReviewForm({ ...reviewForm, fit: e.target.value })}
-                  >
-                    <option value="runs_small">Runs Small</option>
-                    <option value="true_to_size">True to Size</option>
-                    <option value="runs_large">Runs Large</option>
-                  </select>
+                <div className="text-right text-sm text-gray-400 mt-1">
+                  {reviewForm.comment.length}/1000 characters
                 </div>
               </div>
               
-              <div className="form-actions">
-                <button type="button" onClick={() => setShowReviewForm(false)}>
+              <div className="flex gap-4 pt-4 border-t border-gray-700">
+                <button 
+                  type="button" 
+                  onClick={() => setShowReviewForm(false)}
+                  className="flex-1 bg-gray-700 hover:bg-gray-600 text-white font-semibold py-3 px-6 rounded-xl transition-colors"
+                >
                   Cancel
                 </button>
-                <button type="submit">Submit Review</button>
+                <button 
+                  type="submit"
+                  className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-xl transition-colors"
+                >
+                  Submit Review
+                </button>
               </div>
             </form>
           </div>
@@ -318,25 +280,8 @@ const ProductReviews = ({ productId }) => {
                 </div>
               </div>
               
-              <div className="flex items-center gap-3 mb-3">
-                {renderStars(review.rating, 'small')}
-                <span className="font-medium text-white">{review.title}</span>
-              </div>
-              
               <div className="mb-4">
                 <p className="text-gray-300 leading-relaxed">{review.comment}</p>
-              </div>
-              
-              <div className="flex items-center gap-4 mb-4 text-sm">
-                {review.size && (
-                  <span className="bg-blue-600/20 text-blue-400 px-3 py-1 rounded-full">
-                    Size: {review.size}
-                  </span>
-                )}
-                <span className="bg-purple-600/20 text-purple-400 px-3 py-1 rounded-full">
-                  Fit: {review.fit === 'runs_small' ? 'Runs Small' : 
-                        review.fit === 'runs_large' ? 'Runs Large' : 'True to Size'}
-                </span>
               </div>
               
               <div className="flex justify-between items-center">
