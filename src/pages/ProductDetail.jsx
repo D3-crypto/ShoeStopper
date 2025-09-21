@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Heart, ShoppingCart, Plus, Minus, ArrowLeft, Share2, X, Ruler } from 'lucide-react';
+import { Heart, ShoppingCart, Plus, Minus, ArrowLeft, Share2, Ruler } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import { productsAPI } from '../utils/api';
 import { toast } from 'react-toastify';
@@ -362,22 +362,10 @@ const ProductDetail = () => {
 
       {/* Size Guide Popup Modal */}
       {showSizeGuide && product && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-gray-900 rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
-            <div className="flex justify-between items-center p-6 border-b border-gray-700">
-              <h2 className="text-2xl font-bold text-white">Size Guide</h2>
-              <button
-                onClick={() => setShowSizeGuide(false)}
-                className="p-2 hover:bg-gray-700 rounded-lg transition-colors"
-              >
-                <X className="h-6 w-6 text-gray-400" />
-              </button>
-            </div>
-            <div className="p-6">
-              <SizeGuide product={product} />
-            </div>
-          </div>
-        </div>
+        <SizeGuide 
+          product={product} 
+          onClose={() => setShowSizeGuide(false)} 
+        />
       )}
 
       {/* Product Reviews Section */}
