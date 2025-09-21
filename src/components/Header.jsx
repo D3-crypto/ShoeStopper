@@ -28,7 +28,7 @@ const Header = () => {
 
   return (
     <>
-      <header className="bg-gray-900/80 backdrop-blur-md shadow-2xl sticky top-0 z-50 border-b border-gray-700/50">
+      <header className="bg-gray-900/90 backdrop-blur-lg shadow-2xl sticky top-0 z-50 border-b border-gray-700/60">
         <div className="container mx-auto px-4">
           {/* Top bar */}
           <div className="flex items-center justify-between py-4">

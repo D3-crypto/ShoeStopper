@@ -154,7 +154,7 @@ const ProductDetail = () => {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">Product Not Found</h2>
+          <h2 className="text-2xl font-bold text-white mb-4">Product Not Found</h2>
           <button
             onClick={() => navigate('/products')}
             className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700"
@@ -234,7 +234,7 @@ const ProductDetail = () => {
 
             {/* Categories */}
             <div className="mt-6">
-              <h3 className="text-sm font-medium text-gray-900">Categories</h3>
+              <h3 className="text-sm font-medium text-gray-200">Categories</h3>
               <div className="mt-2 flex flex-wrap gap-2">
                 {product.categories.map((category) => (
                   <span
@@ -251,7 +251,7 @@ const ProductDetail = () => {
             {variants.length > 0 && (
               <div className="mt-8">
                 <div className="flex items-justify-between">
-                  <h3 className="text-sm font-medium text-gray-900">Size</h3>
+                  <h3 className="text-sm font-medium text-gray-200">Size</h3>
                 </div>
 
                 <div className="mt-4">
@@ -263,12 +263,12 @@ const ProductDetail = () => {
                           key={size}
                           onClick={() => handleSizeChange(size)}
                           disabled={!isAvailable}
-                          className={`group relative border rounded-md py-3 px-4 flex items-center justify-center text-sm font-medium uppercase hover:bg-gray-50 focus:outline-none sm:flex-1 ${
+                          className={`group relative border rounded-md py-3 px-4 flex items-center justify-center text-sm font-medium uppercase hover:bg-gray-700/60 focus:outline-none sm:flex-1 ${
                             selectedSize === size
                               ? 'bg-blue-600 border-transparent text-white hover:bg-blue-700'
                               : isAvailable
-                              ? 'bg-white border-gray-200 text-gray-900 cursor-pointer'
-                              : 'bg-gray-50 border-gray-200 text-gray-200 cursor-not-allowed'
+                              ? 'bg-gray-800/60 border-gray-600 text-gray-200 cursor-pointer'
+                              : 'bg-gray-900/60 border-gray-700 text-gray-500 cursor-not-allowed'
                           }`}
                         >
                           {size}
@@ -283,7 +283,7 @@ const ProductDetail = () => {
             {/* Color Selection */}
             {variants.length > 0 && (
               <div className="mt-8">
-                <h3 className="text-sm font-medium text-gray-900">Color</h3>
+                <h3 className="text-sm font-medium text-gray-200">Color</h3>
 
                 <div className="mt-4">
                   <div className="flex items-center space-x-3">
@@ -294,12 +294,12 @@ const ProductDetail = () => {
                           key={color}
                           onClick={() => handleColorChange(color)}
                           disabled={!isAvailable}
-                          className={`group relative border rounded-md py-3 px-4 flex items-center justify-center text-sm font-medium capitalize hover:bg-gray-50 focus:outline-none ${
+                          className={`group relative border rounded-md py-3 px-4 flex items-center justify-center text-sm font-medium capitalize hover:bg-gray-700/60 focus:outline-none ${
                             selectedColor === color
                               ? 'bg-blue-600 border-transparent text-white hover:bg-blue-700'
                               : isAvailable
-                              ? 'bg-white border-gray-200 text-gray-900 cursor-pointer'
-                              : 'bg-gray-50 border-gray-200 text-gray-200 cursor-not-allowed'
+                              ? 'bg-gray-800/60 border-gray-600 text-gray-200 cursor-pointer'
+                              : 'bg-gray-900/60 border-gray-700 text-gray-500 cursor-not-allowed'
                           }`}
                         >
                           {color}
@@ -325,7 +325,7 @@ const ProductDetail = () => {
 
             {/* Quantity Selection */}
             <div className="mt-8">
-              <h3 className="text-sm font-medium text-gray-900">Quantity</h3>
+              <h3 className="text-sm font-medium text-gray-200">Quantity</h3>
               <div className="mt-4 flex items-center space-x-3">
                 <button
                   onClick={() => setQuantity(Math.max(1, quantity - 1))}

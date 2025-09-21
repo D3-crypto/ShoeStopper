@@ -29,7 +29,7 @@ function App() {
         <Router basename={basename}>
           <div className="App">
             <Header />
-            <main className="min-h-screen">
+            <main className="min-h-screen bg-gradient-to-br from-slate-900 via-gray-900 to-slate-800">
               <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/products" element={<Products />} />
