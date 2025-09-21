@@ -113,6 +113,35 @@ const ProductDetail = () => {
     return variants.filter(v => v.color === color).map(v => v.size);
   };
 
+  const handleShare = async () => {
+    const shareData = {
+      title: product.title,
+      text: `Check out this amazing product: ${product.title}`,
+      url: window.location.href
+    };
+
+    try {
+      // Check if Web Share API is supported
+      if (navigator.share) {
+        await navigator.share(shareData);
+        toast.success('Product shared successfully!');
+      } else {
+        // Fallback: Copy URL to clipboard
+        await navigator.clipboard.writeText(window.location.href);
+        toast.success('Product link copied to clipboard!');
+      }
+    } catch (error) {
+      // If sharing fails or is cancelled, try to copy to clipboard
+      try {
+        await navigator.clipboard.writeText(window.location.href);
+        toast.success('Product link copied to clipboard!');
+      } catch {
+        console.error('Error sharing product:', error);
+        toast.error('Unable to share product. Please copy the URL manually.');
+      }
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -138,7 +167,7 @@ const ProductDetail = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Back Button */}
         <button
@@ -159,15 +188,15 @@ const ProductDetail = () => {
                   <button
                     key={index}
                     onClick={() => setSelectedImage(index)}
-                    className={`relative h-24 bg-white rounded-md flex items-center justify-center text-sm font-medium uppercase text-gray-900 cursor-pointer hover:bg-gray-50 focus:outline-none focus:ring focus:ring-offset-4 focus:ring-opacity-25 ${
-                      selectedImage === index ? 'ring-2 ring-blue-500' : ''
+                    className={`relative h-24 bg-white/80 backdrop-blur-sm rounded-xl flex items-center justify-center text-sm font-medium uppercase text-gray-900 cursor-pointer hover:bg-white/90 focus:outline-none focus:ring focus:ring-offset-4 focus:ring-opacity-25 shadow-md border border-gray-100 ${
+                      selectedImage === index ? 'ring-2 ring-blue-500 bg-white' : ''
                     }`}
                   >
                     <span className="sr-only">Image {index + 1}</span>
                     <img
                       src={image}
                       alt={`${product.title} ${index + 1}`}
-                      className="w-full h-full object-cover rounded-md"
+                      className="w-full h-full object-cover rounded-xl"
                     />
                   </button>
                 ))}
@@ -175,27 +204,28 @@ const ProductDetail = () => {
             </div>
 
             {/* Main Image */}
-            <div className="w-full aspect-square">
+            <div className="w-full aspect-square bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
               <img
                 src={product.images[selectedImage] || product.images[0]}
                 alt={product.title}
-                className="w-full h-full object-cover object-center sm:rounded-lg"
+                className="w-full h-full object-cover object-center"
               />
             </div>
           </div>
 
           {/* Product Info */}
           <div className="mt-10 px-4 sm:px-0 sm:mt-16 lg:mt-0">
-            <h1 className="text-3xl font-bold tracking-tight text-gray-900">
-              {product.title}
-            </h1>
+            <div className="bg-white/80 backdrop-blur-md rounded-3xl p-8 shadow-xl border border-gray-100">
+              <h1 className="text-3xl font-bold tracking-tight bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                {product.title}
+              </h1>
 
-            <div className="mt-3">
-              <h2 className="sr-only">Product information</h2>
-              <p className="text-3xl tracking-tight text-gray-900">
-                {selectedVariant ? formatPrice(selectedVariant.price) : formatPrice(product.price)}
-              </p>
-            </div>
+              <div className="mt-3">
+                <h2 className="sr-only">Product information</h2>
+                <p className="text-3xl tracking-tight text-gray-900 font-bold">
+                  {selectedVariant ? formatPrice(selectedVariant.price) : formatPrice(product.price)}
+                </p>
+              </div>
 
             <div className="mt-6">
               <h3 className="sr-only">Description</h3>
@@ -330,10 +360,14 @@ const ProductDetail = () => {
                 <span className="sr-only">Add to favorites</span>
               </button>
 
-              <button className="ml-4 py-3 px-3 rounded-md flex items-center justify-center text-gray-400 hover:bg-gray-100 hover:text-gray-500">
+              <button 
+                onClick={handleShare}
+                className="ml-4 py-3 px-3 rounded-md flex items-center justify-center text-gray-400 hover:bg-gray-100 hover:text-gray-500"
+              >
                 <Share2 className="h-5 w-5" />
                 <span className="sr-only">Share</span>
               </button>
+            </div>
             </div>
           </div>
         </div>
