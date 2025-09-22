@@ -1,4 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import api from '../utils/api';
+import { useAuth } from './AuthContext';
 
 const CartContext = createContext();
 
@@ -13,89 +15,151 @@ export const useCart = () => {
 export const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState([]);
   const [cartCount, setCartCount] = useState(0);
+  const [sessionId, setSessionId] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const { user } = useAuth();
 
-  // Load cart from localStorage on component mount
+  // Generate or get session ID for anonymous users
   useEffect(() => {
-    const savedCart = localStorage.getItem('cart');
-    if (savedCart) {
-      const parsedCart = JSON.parse(savedCart);
-      setCartItems(parsedCart);
-      setCartCount(parsedCart.reduce((total, item) => total + item.quantity, 0));
-    }
-  }, []);
-
-  // Save cart to localStorage whenever cartItems changes
-  useEffect(() => {
-    localStorage.setItem('cart', JSON.stringify(cartItems));
-    setCartCount(cartItems.reduce((total, item) => total + item.quantity, 0));
-  }, [cartItems]);
-
-  const addToCart = (product, quantity = 1) => {
-    setCartItems(prevItems => {
-      const existingItem = prevItems.find(item => {
-        if (product.variant) {
-          return item._id === product._id && 
-                 item.selectedSize === product.selectedSize && 
-                 item.selectedColor === product.selectedColor;
-        }
-        return item._id === product._id;
-      });
-      
-      if (existingItem) {
-        return prevItems.map(item => {
-          if (product.variant) {
-            return item._id === product._id && 
-                   item.selectedSize === product.selectedSize && 
-                   item.selectedColor === product.selectedColor
-              ? { ...item, quantity: item.quantity + quantity }
-              : item;
+    const getSessionId = async () => {
+      if (!user) {
+        let storedSessionId = localStorage.getItem('cartSessionId');
+        if (!storedSessionId) {
+          try {
+            const response = await api.post('/cart/session');
+            storedSessionId = response.data.sessionId;
+            localStorage.setItem('cartSessionId', storedSessionId);
+          } catch (error) {
+            console.error('Failed to generate session ID:', error);
           }
-          return item._id === product._id
-            ? { ...item, quantity: item.quantity + quantity }
-            : item;
-        });
+        }
+        setSessionId(storedSessionId);
       } else {
-        return [...prevItems, { ...product, quantity }];
+        // Clear session ID when user logs in
+        localStorage.removeItem('cartSessionId');
+        setSessionId(null);
       }
-    });
-  };
+    };
 
-  const removeFromCart = (productId) => {
-    setCartItems(prevItems => prevItems.filter(item => item._id !== productId));
-  };
+    getSessionId();
+  }, [user]);
 
-  const updateQuantity = (productId, newQuantity) => {
-    if (newQuantity <= 0) {
-      removeFromCart(productId);
-      return;
+  // Load cart from backend when session/user changes
+  useEffect(() => {
+    if (user || sessionId) {
+      loadCart();
     }
+  }, [user, sessionId]);
 
-    setCartItems(prevItems =>
-      prevItems.map(item =>
-        item._id === productId
-          ? { ...item, quantity: newQuantity }
-          : item
-      )
-    );
+  const loadCart = async () => {
+    try {
+      setLoading(true);
+      const params = {};
+      if (!user && sessionId) {
+        params.sessionId = sessionId;
+      }
+      
+      const config = {
+        params,
+        headers: {}
+      };
+      
+      if (!user && sessionId) {
+        config.headers['X-Session-Id'] = sessionId;
+      }
+
+      const response = await api.get('/cart', config);
+      setCartItems(response.data.items || []);
+      setCartCount(response.data.items?.reduce((total, item) => total + item.qty, 0) || 0);
+    } catch (error) {
+      console.error('Failed to load cart:', error);
+      setCartItems([]);
+      setCartCount(0);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const clearCart = () => {
-    setCartItems([]);
-    localStorage.removeItem('cart');
+  const addToCart = async (variantId, quantity = 1) => {
+    try {
+      setLoading(true);
+      const requestData = { variantId, qty: quantity };
+      const config = { headers: {} };
+      
+      if (!user && sessionId) {
+        config.headers['X-Session-Id'] = sessionId;
+      }
+
+      await api.post('/cart/add', requestData, config);
+      await loadCart(); // Reload cart after adding
+    } catch (error) {
+      console.error('Failed to add to cart:', error);
+      throw error;
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const getCartTotal = () => {
-    return cartItems.reduce((total, item) => total + (item.price * item.quantity), 0);
+  const removeFromCart = async (variantId) => {
+    try {
+      setLoading(true);
+      const requestData = { variantId };
+      const config = { headers: {} };
+      
+      if (!user && sessionId) {
+        config.headers['X-Session-Id'] = sessionId;
+      }
+
+      await api.post('/cart/remove', requestData, config);
+      await loadCart(); // Reload cart after removing
+    } catch (error) {
+      console.error('Failed to remove from cart:', error);
+      throw error;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const updateQuantity = async (variantId, newQuantity) => {
+    if (newQuantity <= 0) {
+      return removeFromCart(variantId);
+    }
+    
+    // Remove item then add with new quantity
+    await removeFromCart(variantId);
+    await addToCart(variantId, newQuantity);
+  };
+
+  const clearCart = async () => {
+    try {
+      setLoading(true);
+      // Remove all items one by one
+      for (const item of cartItems) {
+        await removeFromCart(item.variantId._id);
+      }
+    } catch (error) {
+      console.error('Failed to clear cart:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const getTotalPrice = () => {
+    return cartItems.reduce((total, item) => {
+      return total + (item.qty * item.variantId.price);
+    }, 0);
   };
 
   const value = {
     cartItems,
     cartCount,
+    loading,
     addToCart,
     removeFromCart,
     updateQuantity,
     clearCart,
-    getCartTotal
+    getTotalPrice,
+    loadCart
   };
 
   return (
