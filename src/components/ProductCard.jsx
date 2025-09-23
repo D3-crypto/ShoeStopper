@@ -1,27 +1,51 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ShoppingCart, Heart, Plus } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
 import { toast } from 'react-toastify';
 import api from '../utils/api';
+import AddToCartModal from './AddToCartModal';
 
 const ProductCard = ({ product, viewMode = 'grid' }) => {
   const { addToCart } = useCart();
   const { isAuthenticated } = useAuth();
+  const [showAddToCartModal, setShowAddToCartModal] = useState(false);
 
   const handleAddToCart = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    addToCart(product);
-    toast.success(`${product.title} added to cart!`, {
-      position: "top-right",
-      autoClose: 2000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-    });
+    
+    if (!isAuthenticated) {
+      toast.error('Please login to add items to cart');
+      return;
+    }
+
+    // Check if product has variants
+    if (!product.variants || product.variants.length === 0) {
+      toast.error('Product variants not available');
+      return;
+    }
+
+    // Open modal for variant/size selection
+    setShowAddToCartModal(true);
+  };
+
+  const handleModalAddToCart = async (variantId, size, quantity) => {
+    try {
+      await addToCart(variantId, size, quantity);
+      toast.success(`${product.title} added to cart!`, {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
+    } catch (err) {
+      console.error('Error adding to cart:', err);
+      toast.error('Failed to add to cart. Please try again.');
+    }
   };
 
   const handleAddToWishlist = async (e) => {
@@ -218,6 +242,14 @@ const ProductCard = ({ product, viewMode = 'grid' }) => {
           <span>Add to Cart</span>
         </button>
       </div>
+
+      {/* Add to Cart Modal */}
+      <AddToCartModal
+        isOpen={showAddToCartModal}
+        onClose={() => setShowAddToCartModal(false)}
+        product={product}
+        onAddToCart={handleModalAddToCart}
+      />
     </div>
   );
 };

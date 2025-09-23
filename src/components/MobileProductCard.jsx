@@ -2,7 +2,9 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useCart } from '../context/CartContext';
+import { toast } from 'react-toastify';
 import api from '../utils/api';
+import AddToCartModal from './AddToCartModal';
 import './MobileProductCard.css';
 
 const MobileProductCard = ({ product, showBrand = true, layout = 'grid' }) => {
@@ -14,6 +16,7 @@ const MobileProductCard = ({ product, showBrand = true, layout = 'grid' }) => {
   const [imageLoaded, setImageLoaded] = useState(false);
   const [touchStart, setTouchStart] = useState(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [showAddToCartModal, setShowAddToCartModal] = useState(false);
 
   const currentVariant = product.variants?.[selectedVariant] || product.variants?.[0];
   const images = currentVariant?.images || ['/placeholder-shoe.jpg'];
@@ -65,19 +68,25 @@ const MobileProductCard = ({ product, showBrand = true, layout = 'grid' }) => {
     e.preventDefault();
     e.stopPropagation();
 
-    // Find the first available size
-    const firstAvailableSize = currentVariant?.sizes?.find(size => size.stock > 0);
-    
-    if (firstAvailableSize) {
-      addToCart({
-        productId: product._id,
-        variantId: currentVariant._id,
-        size: firstAvailableSize.size,
-        quantity: 1
+    if (!user) {
+      toast.error('Please login to add items to cart');
+      return;
+    }
+
+    // Open modal for variant/size selection
+    setShowAddToCartModal(true);
+  };
+
+  const handleModalAddToCart = async (variantId, size, quantity) => {
+    try {
+      await addToCart(variantId, size, quantity);
+      toast.success(`${product.title} added to cart!`, {
+        position: "top-right",
+        autoClose: 2000,
       });
-    } else {
-      // Could open quick view in future, for now just show message
-      console.log('No sizes available for quick add');
+    } catch (err) {
+      console.error('Error adding to cart:', err);
+      toast.error('Failed to add to cart. Please try again.');
     }
   };
 
@@ -280,6 +289,14 @@ const MobileProductCard = ({ product, showBrand = true, layout = 'grid' }) => {
           </button>
         </div>
       </Link>
+
+      {/* Add to Cart Modal */}
+      <AddToCartModal
+        isOpen={showAddToCartModal}
+        onClose={() => setShowAddToCartModal(false)}
+        product={product}
+        onAddToCart={handleModalAddToCart}
+      />
     </div>
   );
 };
