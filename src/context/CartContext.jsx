@@ -99,18 +99,21 @@ export const CartProvider = ({ children }) => {
     }
   };
 
-  const updateQuantity = async (variantId, newQuantity) => {
+  const updateQuantity = async (variantId, size, newQuantity) => {
     if (!user) {
       throw new Error('Please login to modify cart');
     }
 
-    if (newQuantity <= 0) {
-      return removeFromCart(variantId);
+    try {
+      setLoading(true);
+      await api.put('/cart/update', { variantId, size, qty: newQuantity });
+      await loadCart(); // Reload cart after updating
+    } catch (error) {
+      console.error('Failed to update cart:', error);
+      throw error;
+    } finally {
+      setLoading(false);
     }
-    
-    // Remove item then add with new quantity
-    await removeFromCart(variantId);
-    await addToCart(variantId, newQuantity);
   };
 
   const clearCart = async () => {
@@ -131,7 +134,10 @@ export const CartProvider = ({ children }) => {
 
   const getTotalPrice = () => {
     return cartItems.reduce((total, item) => {
-      return total + (item.qty * item.variantId.price);
+      // Get the price from the size info in the variant
+      const sizeInfo = item.variantId?.sizes?.find(s => s.size === item.size);
+      const price = sizeInfo?.price || 0;
+      return total + (item.qty * price);
     }, 0);
   };
 

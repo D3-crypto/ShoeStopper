@@ -5,7 +5,7 @@ import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
 
 const Cart = () => {
-  const { cartItems, updateQuantity, removeFromCart, getCartTotal, cartCount } = useCart();
+  const { cartItems, updateQuantity, removeFromCart, getTotalPrice, cartCount } = useCart();
   const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
 
@@ -16,9 +16,9 @@ const Cart = () => {
     }).format(price);
   };
 
-  const handleQuantityChange = (productId, newQuantity) => {
+  const handleQuantityChange = (variantId, size, newQuantity) => {
     if (newQuantity < 1) return;
-    updateQuantity(productId, newQuantity);
+    updateQuantity(variantId, size, newQuantity);
   };
 
   const handleCheckout = () => {
@@ -58,7 +58,7 @@ const Cart = () => {
     );
   }
 
-  const subtotal = getCartTotal();
+  const subtotal = getTotalPrice();
   const total = subtotal;
 
   return (
@@ -79,91 +79,102 @@ const Cart = () => {
             {/* Cart Items */}
             <div className="lg:col-span-2">
               <div className="bg-white/80 backdrop-blur-md rounded-3xl shadow-xl border border-gray-100 overflow-hidden">
-                {cartItems.map((item, index) => (
-                  <div key={item._id} className={`p-8 ${index !== cartItems.length - 1 ? 'border-b border-gray-100' : ''}`}>
-                    <div className="flex flex-col sm:flex-row gap-6">
-                      {/* Product Image */}
-                      <div className="w-full sm:w-32 h-32 bg-gradient-to-br from-gray-100 to-gray-200 rounded-2xl overflow-hidden flex-shrink-0">
-                        {item.images && item.images.length > 0 ? (
-                          <img
-                            src={item.images[0]}
-                            alt={item.title}
-                            className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-                          />
-                        ) : (
-                          <div className="w-full h-full flex items-center justify-center text-gray-400">
-                            <div className="text-center">
-                              <div className="text-3xl mb-1">👟</div>
-                              <div className="text-xs font-medium">No Image</div>
-                            </div>
-                          </div>
-                        )}
-                      </div>
-
-                      {/* Product Details */}
-                      <div className="flex-1">
-                        <div className="flex flex-col sm:flex-row justify-between h-full">
-                          <div className="flex-1">
-                            <h3 className="font-bold text-xl text-gray-900 mb-2">
-                              <Link to={`/product/${item._id}`} className="hover:text-blue-600 transition-colors">
-                                {item.title}
-                              </Link>
-                            </h3>
-                            {item.description && (
-                              <p className="text-gray-600 mb-3 line-clamp-2 leading-relaxed">
-                                {item.description}
-                              </p>
-                            )}
-                            <p className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-4">
-                              {formatPrice(item.price)}
-                            </p>
-
-                            {/* Quantity Controls */}
-                            <div className="flex items-center justify-between">
-                              <div className="flex items-center space-x-4">
-                                <span className="text-sm font-medium text-gray-700">Quantity:</span>
-                                <div className="flex items-center bg-gray-100 rounded-2xl">
-                                  <button
-                                    onClick={() => handleQuantityChange(item._id, item.quantity - 1)}
-                                    className="p-3 hover:bg-gray-200 rounded-l-2xl transition-colors"
-                                    disabled={item.quantity <= 1}
-                                  >
-                                    <Minus className="w-4 h-4" />
-                                  </button>
-                                  <span className="px-6 py-3 font-semibold min-w-[3rem] text-center">
-                                    {item.quantity}
-                                  </span>
-                                  <button
-                                    onClick={() => handleQuantityChange(item._id, item.quantity + 1)}
-                                    className="p-3 hover:bg-gray-200 rounded-r-2xl transition-colors"
-                                  >
-                                    <Plus className="w-4 h-4" />
-                                  </button>
-                                </div>
+                {cartItems.map((item, index) => {
+                  // Get product details from populated variantId
+                  const product = item.variantId?.productId;
+                  const variant = item.variantId;
+                  const sizeInfo = variant?.sizes?.find(s => s.size === item.size);
+                  const price = sizeInfo?.price || 0;
+                  
+                  return (
+                    <div key={`${item.variantId._id}-${item.size}`} className={`p-8 ${index !== cartItems.length - 1 ? 'border-b border-gray-100' : ''}`}>
+                      <div className="flex flex-col sm:flex-row gap-6">
+                        {/* Product Image */}
+                        <div className="w-full sm:w-32 h-32 bg-gradient-to-br from-gray-100 to-gray-200 rounded-2xl overflow-hidden flex-shrink-0">
+                          {product?.images && product.images.length > 0 ? (
+                            <img
+                              src={product.images[0]}
+                              alt={product.title}
+                              className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                            />
+                          ) : (
+                            <div className="w-full h-full flex items-center justify-center text-gray-400">
+                              <div className="text-center">
+                                <div className="text-3xl mb-1">👟</div>
+                                <div className="text-xs font-medium">No Image</div>
                               </div>
-
-                              {/* Remove Button */}
-                              <button
-                                onClick={() => removeFromCart(item._id)}
-                                className="flex items-center space-x-2 text-red-500 hover:text-red-700 hover:bg-red-50 px-3 py-2 rounded-xl transition-all duration-200"
-                              >
-                                <Trash2 className="w-4 h-4" />
-                                <span className="font-medium">Remove</span>
-                              </button>
                             </div>
-                          </div>
+                          )}
+                        </div>
 
-                          {/* Item Total */}
-                          <div className="mt-4 sm:mt-0 sm:ml-6 text-right">
-                            <p className="text-2xl font-bold text-gray-900">
-                              {formatPrice(item.price * item.quantity)}
-                            </p>
+                        {/* Product Details */}
+                        <div className="flex-1">
+                          <div className="flex flex-col sm:flex-row justify-between h-full">
+                            <div className="flex-1">
+                              <h3 className="font-bold text-xl text-gray-900 mb-2">
+                                <Link to={`/product/${product?._id}`} className="hover:text-blue-600 transition-colors">
+                                  {product?.title} - {variant?.color}
+                                </Link>
+                              </h3>
+                              {product?.description && (
+                                <p className="text-gray-600 mb-3 line-clamp-2 leading-relaxed">
+                                  {product.description}
+                                </p>
+                              )}
+                              <div className="mb-2">
+                                <span className="text-sm font-medium text-gray-700">Size: {item.size}</span>
+                              </div>
+                              <p className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-4">
+                                {formatPrice(price)}
+                              </p>
+
+                              {/* Quantity Controls */}
+                              <div className="flex items-center justify-between">
+                                <div className="flex items-center space-x-4">
+                                  <span className="text-sm font-medium text-gray-700">Quantity:</span>
+                                  <div className="flex items-center bg-gray-100 rounded-2xl">
+                                    <button
+                                      onClick={() => handleQuantityChange(item.variantId._id, item.size, item.qty - 1)}
+                                      className="p-3 hover:bg-gray-200 rounded-l-2xl transition-colors"
+                                      disabled={item.qty <= 1}
+                                    >
+                                      <Minus className="w-4 h-4" />
+                                    </button>
+                                    <span className="px-6 py-3 font-semibold min-w-[3rem] text-center">
+                                      {item.qty}
+                                    </span>
+                                    <button
+                                      onClick={() => handleQuantityChange(item.variantId._id, item.size, item.qty + 1)}
+                                      className="p-3 hover:bg-gray-200 rounded-r-2xl transition-colors"
+                                    >
+                                      <Plus className="w-4 h-4" />
+                                    </button>
+                                  </div>
+                                </div>
+
+                                {/* Remove Button */}
+                                <button
+                                  onClick={() => removeFromCart(item.variantId._id, item.size)}
+                                  className="flex items-center space-x-2 text-red-500 hover:text-red-700 hover:bg-red-50 px-3 py-2 rounded-xl transition-all duration-200"
+                                >
+                                  <Trash2 className="w-4 h-4" />
+                                  <span className="font-medium">Remove</span>
+                                </button>
+                              </div>
+                            </div>
+
+                            {/* Item Total */}
+                            <div className="mt-4 sm:mt-0 sm:ml-6 text-right">
+                              <p className="text-2xl font-bold text-gray-900">
+                                {formatPrice(price * item.qty)}
+                              </p>
+                            </div>
                           </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
 
               {/* Continue Shopping */}
