@@ -17,6 +17,7 @@ const TouchSizeSelector = ({
       const sizesMap = new Map();
       
       variants.forEach(variant => {
+        // Handle new structure: variants with sizes array
         if (variant.sizes && variant.sizes.length > 0) {
           variant.sizes.forEach(sizeInfo => {
             const size = sizeInfo.size;
@@ -28,6 +29,17 @@ const TouchSizeSelector = ({
               sizesMap.set(size, stock);
             }
           });
+        }
+        // Handle old structure: individual size/color variants
+        else if (variant.size && variant.stock !== undefined) {
+          const size = variant.size;
+          const stock = variant.stock || 0;
+          
+          if (sizesMap.has(size)) {
+            sizesMap.set(size, sizesMap.get(size) + stock);
+          } else {
+            sizesMap.set(size, stock);
+          }
         }
       });
 
@@ -49,6 +61,9 @@ const TouchSizeSelector = ({
 
       setAvailableSizes(sizes);
       setSizeStock(stockInfo);
+    } else {
+      setAvailableSizes([]);
+      setSizeStock({});
     }
   }, [variants]);
 

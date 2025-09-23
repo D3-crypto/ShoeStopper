@@ -15,60 +15,45 @@ export const useCart = () => {
 export const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState([]);
   const [cartCount, setCartCount] = useState(0);
-  const [sessionId, setSessionId] = useState(null);
   const [loading, setLoading] = useState(false);
   const { user } = useAuth();
 
-  // Generate or get session ID for anonymous users
+  // Load cart from backend when user logs in
   useEffect(() => {
-    const getSessionId = async () => {
-      if (!user) {
-        let storedSessionId = localStorage.getItem('cartSessionId');
-        if (!storedSessionId) {
-          try {
-            const response = await api.post('/cart/session');
-            storedSessionId = response.data.sessionId;
-            localStorage.setItem('cartSessionId', storedSessionId);
-          } catch (error) {
-            console.error('Failed to generate session ID:', error);
-          }
+    const loadUserCart = async () => {
+      if (user) {
+        try {
+          setLoading(true);
+          const response = await api.get('/cart');
+          setCartItems(response.data.items || []);
+          setCartCount(response.data.items?.reduce((total, item) => total + item.qty, 0) || 0);
+        } catch (error) {
+          console.error('Failed to load cart:', error);
+          setCartItems([]);
+          setCartCount(0);
+        } finally {
+          setLoading(false);
         }
-        setSessionId(storedSessionId);
       } else {
-        // Clear session ID when user logs in
-        localStorage.removeItem('cartSessionId');
-        setSessionId(null);
+        // Clear cart when user logs out
+        setCartItems([]);
+        setCartCount(0);
       }
     };
 
-    getSessionId();
+    loadUserCart();
   }, [user]);
 
-  // Load cart from backend when session/user changes
-  useEffect(() => {
-    if (user || sessionId) {
-      loadCart();
-    }
-  }, [user, sessionId]);
-
   const loadCart = async () => {
+    if (!user) {
+      setCartItems([]);
+      setCartCount(0);
+      return;
+    }
+
     try {
       setLoading(true);
-      const params = {};
-      if (!user && sessionId) {
-        params.sessionId = sessionId;
-      }
-      
-      const config = {
-        params,
-        headers: {}
-      };
-      
-      if (!user && sessionId) {
-        config.headers['X-Session-Id'] = sessionId;
-      }
-
-      const response = await api.get('/cart', config);
+      const response = await api.get('/cart');
       setCartItems(response.data.items || []);
       setCartCount(response.data.items?.reduce((total, item) => total + item.qty, 0) || 0);
     } catch (error) {
@@ -81,16 +66,13 @@ export const CartProvider = ({ children }) => {
   };
 
   const addToCart = async (variantId, quantity = 1) => {
+    if (!user) {
+      throw new Error('Please login to add items to cart');
+    }
+
     try {
       setLoading(true);
-      const requestData = { variantId, qty: quantity };
-      const config = { headers: {} };
-      
-      if (!user && sessionId) {
-        config.headers['X-Session-Id'] = sessionId;
-      }
-
-      await api.post('/cart/add', requestData, config);
+      await api.post('/cart/add', { variantId, qty: quantity });
       await loadCart(); // Reload cart after adding
     } catch (error) {
       console.error('Failed to add to cart:', error);
@@ -101,16 +83,13 @@ export const CartProvider = ({ children }) => {
   };
 
   const removeFromCart = async (variantId) => {
+    if (!user) {
+      throw new Error('Please login to modify cart');
+    }
+
     try {
       setLoading(true);
-      const requestData = { variantId };
-      const config = { headers: {} };
-      
-      if (!user && sessionId) {
-        config.headers['X-Session-Id'] = sessionId;
-      }
-
-      await api.post('/cart/remove', requestData, config);
+      await api.post('/cart/remove', { variantId });
       await loadCart(); // Reload cart after removing
     } catch (error) {
       console.error('Failed to remove from cart:', error);
@@ -121,6 +100,10 @@ export const CartProvider = ({ children }) => {
   };
 
   const updateQuantity = async (variantId, newQuantity) => {
+    if (!user) {
+      throw new Error('Please login to modify cart');
+    }
+
     if (newQuantity <= 0) {
       return removeFromCart(variantId);
     }
@@ -131,12 +114,14 @@ export const CartProvider = ({ children }) => {
   };
 
   const clearCart = async () => {
+    if (!user) {
+      throw new Error('Please login to clear cart');
+    }
+
     try {
       setLoading(true);
-      // Remove all items one by one
-      for (const item of cartItems) {
-        await removeFromCart(item.variantId._id);
-      }
+      await api.delete('/cart/clear');
+      await loadCart();
     } catch (error) {
       console.error('Failed to clear cart:', error);
     } finally {

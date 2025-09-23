@@ -21,7 +21,8 @@ const ProductDetail = () => {
   const [selectedSize, setSelectedSize] = useState('');
   const [selectedColor, setSelectedColor] = useState('');
   const [quantity, setQuantity] = useState(1);
-  const [selectedVariant, setSelectedVariant] = useState(null);
+  const [selectedVariantObj, setSelectedVariantObj] = useState(null);
+  const [selectedSizeObj, setSelectedSizeObj] = useState(null);
   const [showSizeGuide, setShowSizeGuide] = useState(false);
 
   useEffect(() => {
@@ -40,9 +41,14 @@ const ProductDetail = () => {
         // Set default selections
         if (variants && variants.length > 0) {
           const firstVariant = variants[0];
-          setSelectedSize(firstVariant.size);
-          setSelectedColor(firstVariant.color);
-          setSelectedVariant(firstVariant);
+          const firstSize = firstVariant.sizes && firstVariant.sizes[0];
+          
+          if (firstSize) {
+            setSelectedColor(firstVariant.color);
+            setSelectedSize(firstSize.size);
+            setSelectedVariantObj(firstVariant);
+            setSelectedSizeObj(firstSize);
+          }
         }
 
       } catch (error) {
@@ -63,32 +69,46 @@ const ProductDetail = () => {
 
   const handleColorChange = (color) => {
     setSelectedColor(color);
-    updateSelectedVariant(selectedSize, color);
+    // When changing color, select first available size for that color
+    const colorVariant = variants.find(v => v.color === color);
+    if (colorVariant && colorVariant.sizes && colorVariant.sizes.length > 0) {
+      const firstAvailableSize = colorVariant.sizes.find(s => s.stock > 0) || colorVariant.sizes[0];
+      setSelectedSize(firstAvailableSize.size);
+      updateSelectedVariant(firstAvailableSize.size, color);
+    }
   };
 
   const updateSelectedVariant = (size, color) => {
-    const variant = variants.find(v => v.size === size && v.color === color);
-    setSelectedVariant(variant);
+    const variant = variants.find(v => v.color === color);
+    const sizeObj = variant?.sizes?.find(s => s.size === size);
+    
+    setSelectedVariantObj(variant);
+    setSelectedSizeObj(sizeObj);
   };
 
   const handleAddToCart = () => {
-    if (!selectedVariant) {
+    if (!selectedSizeObj || !selectedVariantObj) {
       toast.error('Please select size and color');
       return;
     }
 
-    if (selectedVariant.stock < quantity) {
+    if (selectedSizeObj.stock < quantity) {
       toast.error('Not enough stock available');
       return;
     }
 
     const cartItem = {
       ...product,
-      variant: selectedVariant,
+      variant: {
+        ...selectedVariantObj,
+        size: selectedSizeObj.size,
+        stock: selectedSizeObj.stock,
+        price: selectedSizeObj.price || selectedVariantObj.price || product.price
+      },
       quantity: quantity,
       selectedSize,
       selectedColor,
-      price: selectedVariant.price
+      price: selectedSizeObj.price || selectedVariantObj.price || product.price
     };
 
     addToCart(cartItem);
@@ -103,11 +123,14 @@ const ProductDetail = () => {
   };
 
   const getAvailableColors = () => {
-    return [...new Set(variants.map(v => v.color))];
-  };
-
-  const getColorsForSize = (size) => {
-    return variants.filter(v => v.size === size).map(v => v.color);
+    if (!variants.length) return [];
+    
+    // Handle both new and old variant structures
+    const colors = variants
+      .map(variant => variant.color)
+      .filter(Boolean);
+    
+    return [...new Set(colors)];
   };
 
   const handleShare = async () => {
@@ -220,7 +243,10 @@ const ProductDetail = () => {
               <div className="mt-3">
                 <h2 className="sr-only">Product information</h2>
                 <p className="text-3xl tracking-tight text-white font-bold">
-                  {selectedVariant ? formatPrice(selectedVariant.price) : formatPrice(product.price)}
+                  {selectedSizeObj ? 
+                    formatPrice(selectedSizeObj.price || selectedVariantObj?.price || product.price) : 
+                    formatPrice(product.price)
+                  }
                 </p>
               </div>
 
@@ -275,16 +301,18 @@ const ProductDetail = () => {
                 <div className="mt-4">
                   <div className="flex items-center space-x-3">
                     {getAvailableColors().map((color) => {
-                      const isAvailable = getColorsForSize(selectedSize).includes(color);
+                      const colorVariant = variants.find(v => v.color === color);
+                      const hasAnyStock = colorVariant?.sizes?.some(s => s.stock > 0);
+                      
                       return (
                         <button
                           key={color}
                           onClick={() => handleColorChange(color)}
-                          disabled={!isAvailable}
+                          disabled={!hasAnyStock}
                           className={`group relative border rounded-md py-3 px-4 flex items-center justify-center text-sm font-medium capitalize hover:bg-gray-700/60 focus:outline-none ${
                             selectedColor === color
                               ? 'bg-blue-600 border-transparent text-white hover:bg-blue-700'
-                              : isAvailable
+                              : hasAnyStock
                               ? 'bg-gray-800/60 border-gray-600 text-gray-200 cursor-pointer'
                               : 'bg-gray-900/60 border-gray-700 text-gray-500 cursor-not-allowed'
                           }`}
@@ -299,11 +327,11 @@ const ProductDetail = () => {
             )}
 
             {/* Stock Status */}
-            {selectedVariant && (
+            {selectedSizeObj && (
               <div className="mt-6">
-                <p className={`text-sm ${selectedVariant.stock > 0 ? 'text-green-600' : 'text-red-600'}`}>
-                  {selectedVariant.stock > 0 
-                    ? `${selectedVariant.stock} in stock`
+                <p className={`text-sm ${selectedSizeObj.stock > 0 ? 'text-green-600' : 'text-red-600'}`}>
+                  {selectedSizeObj.stock > 0 
+                    ? `${selectedSizeObj.stock} in stock`
                     : 'Out of stock'
                   }
                 </p>
@@ -323,7 +351,7 @@ const ProductDetail = () => {
                 <span className="text-lg font-medium">{quantity}</span>
                 <button
                   onClick={() => setQuantity(quantity + 1)}
-                  disabled={selectedVariant && quantity >= selectedVariant.stock}
+                  disabled={selectedSizeObj && quantity >= selectedSizeObj.stock}
                   className="flex items-center justify-center w-8 h-8 rounded-full border border-gray-300 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <Plus className="h-4 w-4" />
@@ -335,7 +363,7 @@ const ProductDetail = () => {
             <div className="mt-10 flex sm:flex-col1">
               <button
                 onClick={handleAddToCart}
-                disabled={!selectedVariant || selectedVariant.stock === 0}
+                disabled={!selectedSizeObj || selectedSizeObj.stock === 0}
                 className="max-w-xs flex-1 bg-blue-600 border border-transparent rounded-md py-3 px-8 flex items-center justify-center text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:bg-gray-400 disabled:cursor-not-allowed"
               >
                 <ShoppingCart className="h-5 w-5 mr-2" />
