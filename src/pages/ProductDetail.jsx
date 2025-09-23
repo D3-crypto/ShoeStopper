@@ -86,7 +86,7 @@ const ProductDetail = () => {
     setSelectedSizeObj(sizeObj);
   };
 
-  const handleAddToCart = () => {
+  const handleAddToCart = async () => {
     if (!selectedSizeObj || !selectedVariantObj) {
       toast.error('Please select size and color');
       return;
@@ -97,22 +97,17 @@ const ProductDetail = () => {
       return;
     }
 
-    const cartItem = {
-      ...product,
-      variant: {
-        ...selectedVariantObj,
-        size: selectedSizeObj.size,
-        stock: selectedSizeObj.stock,
-        price: selectedSizeObj.price || selectedVariantObj.price || product.price
-      },
-      quantity: quantity,
-      selectedSize,
-      selectedColor,
-      price: selectedSizeObj.price || selectedVariantObj.price || product.price
-    };
-
-    addToCart(cartItem);
-    toast.success(`${product.title} added to cart!`);
+    try {
+      // Send the variant ID to the backend
+      await addToCart(selectedVariantObj._id, quantity);
+      toast.success(`${product.title} added to cart!`);
+    } catch (error) {
+      if (error.message === 'Please login to add items to cart') {
+        toast.error('Please login to add items to cart');
+      } else {
+        toast.error('Failed to add item to cart');
+      }
+    }
   };
 
   const formatPrice = (price) => {
