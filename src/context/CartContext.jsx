@@ -65,14 +65,14 @@ export const CartProvider = ({ children }) => {
     }
   };
 
-  const addToCart = async (variantId, quantity = 1) => {
+  const addToCart = async (variantId, size, quantity = 1) => {
     if (!user) {
       throw new Error('Please login to add items to cart');
     }
 
     try {
       setLoading(true);
-      await api.post('/cart/add', { variantId, qty: quantity });
+      await api.post('/cart/add', { variantId, size, qty: quantity });
       await loadCart(); // Reload cart after adding
     } catch (error) {
       console.error('Failed to add to cart:', error);
@@ -82,14 +82,14 @@ export const CartProvider = ({ children }) => {
     }
   };
 
-  const removeFromCart = async (variantId) => {
+  const removeFromCart = async (variantId, size) => {
     if (!user) {
       throw new Error('Please login to modify cart');
     }
 
     try {
       setLoading(true);
-      await api.post('/cart/remove', { variantId });
+      await api.post('/cart/remove', { variantId, size });
       await loadCart(); // Reload cart after removing
     } catch (error) {
       console.error('Failed to remove from cart:', error);

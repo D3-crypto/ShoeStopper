@@ -98,8 +98,8 @@ const ProductDetail = () => {
     }
 
     try {
-      // Send the variant ID to the backend
-      await addToCart(selectedVariantObj._id, quantity);
+      // Send the variant ID and selected size to the backend
+      await addToCart(selectedVariantObj._id, selectedSizeObj.size, quantity);
       toast.success(`${product.title} added to cart!`);
     } catch (error) {
       if (error.message === 'Please login to add items to cart') {
